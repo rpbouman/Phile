@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin title="Pentaho Files">
+
+  <overlays>
+    <overlay id="startup.phase" resourcebundle="api/repos/phase/resources/messages/launchermessages.properties" priority="2">
+      <menubar id="toolsmenu">
+        <menuitem
+          id="files"
+          label="Pentaho Files"
+          command="mantleXulHandler.openUrl('Phile', 'Phile', 'content/phile/html/index.html')"
+        />
+      </menubar>
+    </overlay>
+  </overlays>
+
+  <static-paths>
+    <static-path url="/phile/js" localFolder="js"/>
+    <static-path url="/phile/html" localFolder="html"/>
+    <static-path url="/phile/doc/api" localFolder="doc/api"/>
+  </static-paths>
+
+</plugin>
+

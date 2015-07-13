@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Phile demo</title>
+
+    <script type="text/javascript">
+      //pull in Pentaho styles.
+      var mantle_win;
+      if (parent) mantle_win = parent;
+      if (window.opener) {
+        if (window.opener.parent) {
+          mantle_win = window.opener.parent;
+        }
+        else {
+          mantle_win = window.opener;
+        }
+      }
+
+      var active_theme = mantle_win.active_theme;
+      var core_theme_tree = mantle_win.core_theme_tree;
+      var module_theme_tree = mantle_win.module_theme_tree;
+      var CONTEXT_PATH = mantle_win.CONTEXT_PATH;
+    </script>
+    <script type="text/javascript" src="../../../js/themes.js?context=mantle&cssOnly=true"></script>
+
+    <style type="text/css">
+      body, html {
+        padding: 0px;
+        margin: 0px;
+      }
+
+      .main {
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        top: 0px;
+        bottom: 0px;
+      }
+
+      .header, .left, .right, .top, .bottom {
+        border-color: lightgrey;
+        margin: 0px;
+        padding: 0px;
+      }
+
+      .header {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        height: 50px;
+        margin: 0px;
+        padding: 0px;
+        border-width: 2px;
+        border-bottom-style: solid
+      }
+
+      .left, .right {
+        position: absolute;
+        width: 50%;
+        top: 50px;
+        bottom: 0px;
+        border-width: 1px;
+        overflow: auto;
+      }
+
+      .left {
+        left: 0px;
+        border-right-style: solid;
+      }
+
+      .right {
+        right: 0px;
+        border-left-style: solid;
+      }
+
+      .top, .bottom {
+        position: absolute;
+        height: 50%;
+        left: 0px;
+        right: 0px;
+        border-width: 1px;
+        overflow: auto;
+      }
+
+      .top {
+        top: 0px;
+        border-bottom-style: solid;
+      }
+
+      .bottom {
+        bottom: 0px;
+        border-top-style: solid;
+      }
+    </style>
+
+    <style type="text/css">
+      .tree {
+      }
+
+      .tree .node {
+        cursor: default;
+      }
+
+      .tree .node > .head {
+        white-space: nowrap;
+      }
+
+      .tree .node > .head > .toggle,
+      .tree .node > .head > .icon {
+        background-repeat: no-repeat;
+      }
+
+      .tree .folder > .head > .toggle {
+        cursor: pointer;
+      }
+
+      .tree .folder[data-state=collapsed] > .head > .toggle {
+        background-image: url(../../common-ui/resources/themes/crystal/images/arrow_closed.png);
+      }
+
+      .tree .folder[data-state=expanded] > .head > .toggle {
+        background-image: url(../../common-ui/resources/themes/crystal/images/arrow_open.png);
+      }
+
+      .tree .file > .head > .icon {
+        background-image: url(../../common-ui/resources/themes/crystal/images/file_generic.png);
+      }
+
+      .tree .folder[data-state=collapsed] > .head > .icon {
+        background-image: url(../../common-ui/resources/themes/crystal/images/folder_closed.png);
+      }
+
+      .tree .folder[data-state=expanded] > .head > .icon {
+        background-image: url(../../common-ui/resources/themes/crystal/images/folder_open.png);
+      }
+
+      .tree .node > .body {
+        padding-left: 20px;
+      }
+
+      .tree .node[data-state=collapsed] > .body {
+        display: none
+      }
+
+      .tree .node[data-selected=true] > .head {
+        background-color: lightblue;
+        color: white;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <div class="main">
+      <div class="header">
+        <button disabled="true" id="btnNewFile" onclick="newFile()">New File</button>
+        <button disabled="true" id="btnNewDirectory" onclick="newDirectory()">New Directory</button>
+        <button disabled="true" id="btnDelete" onclick="deleteSelected()">Delete</button>
+        <button id="btnApiDocs" onclick="openDocTab()">API Docs</button>
+      </div>
+      <div id="tree" class="tree left">
+      </div>
+      <div class="right">
+        <pre id="top" class="top"></pre>
+        <div id="bottom" class="bottom"></div>
+      </div>
+    </div>
+
+    <script src="../js/Phile.js" type="text/javascript"></script>
+    <script>
+      var phile = new Phile();
+
+      function openDocTab(){
+        top.openURL("Phile API Docs", "phile-api-docs", "content/phile/doc/api/index.html");
+      }
+
+      function getChildrenForPath(path){
+        phile.getChildren({
+          path: path,
+          success: function(options, xhr, data) {
+            if (!data) {
+              return;
+            }
+            var items = data.repositoryFileDto, i , n = items.length, item;
+            items.sort(Phile.compareFilesCaseInsensitive);
+            for (i = 0; i < n; i++){
+              item = items[i];
+              createTreeNode(item);
+            }
+          },
+          failure: function(options, xhr, exception) {
+            alert("Error: " + JSON.stringify(exception));
+          }
+        });
+      }
+
+      function toggleClick(){
+        var head = this.parentNode;
+        var node = head.parentNode;
+
+        var state = node.getAttribute("data-state");
+        switch (state) {
+          case "expanded":
+            state = "collapsed";
+            break;
+          case "collapsed":
+            var body = head.nextSibling;
+            if (body.childNodes.length === 0) {
+              var path;
+              if (node.id === "/") {
+                path = "";
+              }
+              else {
+                path = node.id;
+              }
+              getChildrenForPath(path);
+            }
+            state = "expanded";
+            break;
+        }
+        node.setAttribute("data-state", state);
+      }
+
+      function escapeHtml(text) {
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      }
+
+      function displayProperties(properties, dom) {
+        var text = JSON.stringify(properties, null, " ");
+        dom.innerHTML = escapeHtml(text);
+      }
+
+      function displayContents(path, contents, dom){
+        var a = document.createElement("A");
+        a.textContent = path;
+        a.href = phile.getUrlForDownload(path);
+        dom.appendChild(a);
+
+        var pre = document.createElement("PRE");
+        pre.innerHTML = escapeHtml(contents);
+        dom.appendChild(pre);
+      }
+
+      var selected = null;
+      function labelClick(){
+        if (selected) {
+          selected.setAttribute("data-selected", false);
+        }
+
+        var head = this.parentNode;
+        var node = head.parentNode;
+
+        phile.getProperties({
+          path: node.id,
+          success: function(options, xhr, data){
+            var top = document.getElementById("top");
+            top.innerHTML = "";
+            displayProperties(data, top);
+          },
+          failure: function(options, xhr, data){
+            alert("Error: " + JSON.stringify(exception));
+          }
+        });
+
+        var bottom = document.getElementById("bottom");
+        bottom.innerHTML = "";
+        var isFile = (node.className.indexOf("folder") === -1);
+        if (isFile) {
+          phile.getContents({
+            path: node.id,
+            headers: {
+              Accept: "text/plain"
+            },
+            success: function(options, xhr, data) {
+              displayContents(options.path, xhr.responseText, bottom);
+            },
+            failure: function(options, xhr, exceptions){
+              alert("Error: " + JSON.stringify(exception));
+            }
+          });
+        }
+
+        document.getElementById("btnDelete").disabled = false;
+        document.getElementById("btnNewFile").disabled = isFile;
+        document.getElementById("btnNewDirectory").disabled = isFile;
+
+        selected = node;
+        selected.setAttribute("data-selected", true);
+
+      }
+
+      function newFile(){
+        var path = selected.id;
+        var name = prompt("Please enter a name for your new file", "new file");
+        if (name === null) {
+          return;
+        }
+        var contents = prompt("Please enter some contents for your new file", "Some contents");
+        if (contents === null) {
+          return;
+        }
+        var newPath = path + "/" + name;
+        phile.saveFile({
+          path: newPath,
+          data: contents,
+          success: function(xhr, options, data) {
+            selected.lastChild.innerHTML = "";
+            selected.setAttribute("data-state", "expanded");
+            getChildrenForPath(path);
+          },
+          failure: function(xhr, options, exception){
+            alert("Error: " + JSON.stringify(exception));
+          }
+        });
+      }
+
+      function newDirectory(){
+        var path = selected.id;
+        var name = prompt("Please enter a name for your new directory.", "new directory");
+        if (name === null) {
+          return;
+        }
+        var newPath = path + "/" + name;
+        phile.createDirectory({
+          path: newPath,
+          success: function(xhr, options, data) {
+            selected.lastChild.innerHTML = "";
+            selected.setAttribute("data-state", "expanded");
+            getChildrenForPath(path);
+          },
+          failure: function(xhr, options, exception){
+            alert("Error: " + JSON.stringify(exception));
+          }
+        });
+      }
+
+      function deleteSelected(){
+
+      }
+
+      function createTreeNode(conf){
+        var spacer = "&#160;&#160;&#160;&#160;&#160;&#160;";
+        //the node itself
+        var node = document.createElement("DIV");
+        node.setAttribute("data-conf", JSON.stringify(conf));
+
+        var classNames = ["node"];
+        if (conf.hidden === "true") {
+          classNames.push("hidden");
+        }
+        else
+        if (conf.folder === "true") {
+          classNames.push("folder");
+        }
+        else {
+          classNames.push("file");
+        }
+
+        node.className = classNames.join(" ");
+        node.setAttribute("data-state", "collapsed");
+
+        //the node head
+        var head = document.createElement("DIV");
+        head.className = "head";
+
+        var toggle = document.createElement("SPAN");
+        toggle.className = "toggle";
+        toggle.onclick = toggleClick;
+        toggle.innerHTML = spacer;
+        head.appendChild(toggle);
+
+        var icon = document.createElement("SPAN");
+        icon.className = "icon";
+        icon.innerHTML = spacer;
+        head.appendChild(icon);
+
+        var label = document.createElement("SPAN");
+        label.className = "label";
+        label.onclick = labelClick;
+        label.textContent = conf.title;
+        head.appendChild(label);
+
+        node.appendChild(head);
+
+        //the node body
+        var body = document.createElement("DIV");
+        body.className = "body";
+        node.appendChild(body);
+
+        //attach the node to its parent node, or the tree.
+        var path = conf.path, lastIndex = conf.path.lastIndexOf("/");
+        var parentNode, parentId;
+
+        node.id = path;
+        parentId = path.substr(0, lastIndex);
+        if (parentId === "") {
+          parentNode = document.getElementById("tree");
+        }
+        else {
+          parentNode = document.getElementById(parentId);
+          parentNode = parentNode.lastChild;
+        }
+
+        parentNode.appendChild(node)
+        return node;
+      }
+
+      getChildrenForPath("");
+    </script>
+  </body>
+</html>

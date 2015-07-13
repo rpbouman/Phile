@@ -1,0 +1,60 @@
+<project name="phile" default="dist" basedir=".">
+  <description>
+    Pentaho Files
+  </description>
+
+  <property name="dist" location="dist"/>
+  <property name="plugin" location="plugin"/>
+  <property name="plugin-html" location="${plugin}/html"/>
+  <property name="plugin-js" location="${plugin}/js"/>
+  <property name="pentaho-system-dir"  location="/pentaho-solutions/system"/>
+
+  <property name="pentaho-5.4"  location="/home/roland/pentaho-ce/biserver-ce-5.4.0.0-128/biserver-ce"/>
+
+  <target name="init">
+    <tstamp/>
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="dist" depends="clean" description="generate the distribution" >
+    <copy todir="${plugin}/js">
+      <fileset dir="src">
+        <include name="Phile.js"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${plugin}">
+      <fileset dir=".">
+        <include name="doc/**"/>
+      </fileset>
+    </copy>
+
+    <zip destfile="${dist}/${ant.project.name}.zip">
+      <zipfileset dir="${plugin}" includes="plugin.xml" prefix="${ant.project.name}"/>
+      <zipfileset dir="${plugin}/html" prefix="${ant.project.name}/html"/>
+      <zipfileset dir="${plugin}/js" prefix="${ant.project.name}/js"/>
+      <zipfileset dir="${plugin}/doc" prefix="${ant.project.name}/doc"/>
+    </zip>
+  </target>
+
+  <target name="clean" description="clean up" >
+    <delete dir="${dist}"/>
+  </target>
+
+  <target name="undeploy-pentaho-5.4" description="undeploy distribution">
+    <delete dir="${pentaho-5.4}${pentaho-system-dir}/${ant.project.name}"/>
+  </target>
+
+  <target name="deploy-pentaho-5.4" depends="dist,undeploy-pentaho-5.4" description="deploy distribution">
+    <unzip src="${dist}/${ant.project.name}.zip" dest="${pentaho-5.4}${pentaho-system-dir}"/>
+  </target>
+
+  <target name="api-docs">
+    <exec executable="yuidoc">
+      <arg value="-o"/>
+      <arg value="doc/api"/>
+      <arg value="src"/>
+    </exec>
+  </target>
+
+</project>
