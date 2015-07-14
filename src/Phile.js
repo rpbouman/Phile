@@ -204,8 +204,16 @@ Phile.separator = "/";
 *  @static
 **/
 Phile.compareFilesCaseSensitive = function(fileDto1, fileDto2){
+  if (fileDto1.file) {
+    fileDto1 = fileDto1.file;
+  }
   var folder1 = fileDto1.folder;
+
+  if (fileDto2.file) {
+    fileDto2 = fileDto2.file;
+  }
   var folder2 = fileDto2.folder;
+
   if (folder1 === folder2) {
     if (fileDto1.name > fileDto2.name) {
       return 1;
@@ -235,8 +243,16 @@ Phile.compareFilesCaseSensitive = function(fileDto1, fileDto2){
 *  @static
 **/
 Phile.compareFilesCaseInsensitive = function(fileDto1, fileDto2){
+  if (fileDto1.file) {
+    fileDto1 = fileDto1.file;
+  }
   var folder1 = fileDto1.folder;
+
+  if (fileDto2.file) {
+    fileDto2 = fileDto2.file;
+  }
   var folder2 = fileDto2.folder;
+
   if (folder1 === folder2) {
     var name1 = fileDto1.name.toUpperCase();
     var name2 = fileDto2.name.toUpperCase();
@@ -348,6 +364,10 @@ Phile.prototype = {
 *   Specific properties: <dl>
 *     <dt><code>path</code></dt>
 *     <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+*     <dt><code>showHidden</code></dt>
+*     <dd>Boolean to specify whether hidden files should be included in the response</dd>
+*     <dt><code>filter</code></dt>
+*     <dd>String to specify a search string to filter the result.</dd>
 *   </dl>
 *   The response object passed back to the <code>success</code> callback has one property <code>repositoryFileDto</code>.
 *   This is an array representing the list of children. Array items have the following properties: <dl>
@@ -415,14 +435,21 @@ Phile.prototype = {
     if (!conf.params) {
       conf.params = {};
     }
+    if (typeof(conf.showHidden) !== "undefined") {
+      conf.params.showHidden = Boolean(conf.showHidden);
+    }
+    if (typeof(conf.filter) !== "undefined") {
+      conf.params.filter = String(conf.filter);
+    }
     if (!conf.headers) {
       conf.headers = {};
     }
     if (!conf.headers.Accept) {
       conf.headers.Accept = "application/json";
     }
-    conf.params.depth = 1;
-    conf.action = "children";
+    if (typeof(conf.action) === "undefined") {
+      conf.action = "children";
+    }
     conf.method = "GET";
     return this.request(conf);
   },
@@ -432,19 +459,28 @@ Phile.prototype = {
 *   Specific properties: <dl>
 *     <dt><code>path</code></dt>
 *     <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+*     <dt><code>showHidden</code></dt>
+*     <dd>Boolean to specify whether hidden files should be included in the response</dd>
+*     <dt><code>filter</code></dt>
+*     <dd>String to specify a search string to filter the result.</dd>
 *     <dt><code>depth</code></dt>
 *     <dd>Integer. Specifies the number of levels to traverse. Default: <code>1</code>.</dd>
 *   </dl>
+*   The response object passed back to the <code>success</code> callback has two properties: <dl>
+*     <dt><code>file</code></dt>
+*     <dd>The <code>file</code> property is an object type which holds the properties of the file that is the root of the tree, i.e. the properties of the file identified by the path specified in the argument <code>conf</code> object.</dd>
+*     <dt><code>children</code></dt>
+*     <dd>
+*       Optional. The <code>children</code> property is an array of objects representing the children of the file identified by the path specified in the argument <code>conf</code> object.
+*       Each of these objects again has a <code>file</code> property, and optionally, a <code>children</code> property.
+*     </dd>
+*   </dl>.
 *   @method getTree
 *   @param {object} conf Object specifies where and how to get a tree of file objects from.
 */
   getTree: function(conf) {
     if (!conf) {
       conf = {};
-    }
-    conf.service = this.options.fileService;
-    if (!conf.path) {
-      conf.path = "";
     }
     if (!conf.params) {
       conf.params = {};
@@ -453,17 +489,25 @@ Phile.prototype = {
     if (!conf.params.depth) {
       conf.params.depth = depth;
     }
-    if (!conf.headers) {
-      conf.headers = {};
-    }
-    if (!conf.headers.Accept) {
-      conf.headers.Accept = "application/json";
-    }
-
     conf.action = "tree";
-    conf.method = "GET";
-    conf.service = this.options.fileService;
-    return this.request(conf);
+    return this.getChildren(conf);
+  },
+/**
+*   Get the contents of the trash bin.
+*   The response object passed back to the <code>success</code> is an array of <code>repositoryFileDto</code> objects.
+*   The structure of these objects are described by the <a href="#method_getChildren"><code>getChildren</code></a> method.
+*   @method getTrash
+*   @param {object} conf Object specifies callbacks.
+*/
+  getTrash: function(conf){
+    if (!conf) {
+      conf = {};
+    }
+    if (!conf.params) {
+      conf.params = {};
+    }
+    conf.action = "deleted";
+    return this.getChildren(conf);
   },
 /**
 *   This method can be used to get the contents of a particular file.
@@ -565,7 +609,65 @@ Phile.prototype = {
     conf.service = this.options.fileService;
     return this.create(conf);
   },
-  discard: function() {
+/**
+*   Get the home directory of a user.
+*   Specific properties: <dl>
+*     <dt><code>user</code></dt>
+*     <dd>String (optional). Specifies the user for which to get the home directory. If the user is omitted, it gets the home directory of the current user.</dd>
+*   </dl>
+*   @method getUserHomeDir
+*   @param {object} conf Specifies the callbacks to be notified.
+*/
+  getUserHomeDir: function(conf){
+    conf.service = this.options.sessionService;
+    if (conf.user) {
+      conf.path = "workspaceDirForUser";
+      conf.action = conf.user;
+    }
+    else {
+      delete conf.path;
+      conf.action = "userWorkspaceDir";
+    }
+    return this.request(conf);
+  },
+/**
+*   Discards the file or directory.
+*   Specific properties: <dl>
+*     <dt><code>id</code></dt>
+*     <dd>String (optional). The guid of the file or directory to remove.</dd>
+*     <dt><code>path</code></dt>
+*     <dd>String (optional). The path of the file or directory to remove.</dd>
+*     <dt><code>permanent</code></dt>
+*     <dd>Boolena (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>
+*   </dl>
+*   @method discard
+*   @param {object} conf Specifies the callbacks to be notified.
+*/
+  discard: function(conf) {
+    if (conf.id) {
+      delete conf.path;
+      conf.service = this.options.fileService;
+      conf.method = "PUT";
+      conf.action = Boolean(conf.permanent) ? "deletepermanent" : "delete";
+      conf.data = conf.id;
+      this.request(conf);
+    }
+    else
+    if (conf.path) {
+      var me = this;
+      this.getProperties({
+        path: conf.path,
+        success: function(options, xhr, data){
+          conf.id = data.id;
+          me.discard(conf);
+        },
+        failure: function(options, xhr, exception) {
+          if (typeof(conf.failure) === "function") {
+            conf.failure.call(conf.scope, options, xhr, exception);
+          }
+        }
+      });
+    }
   }
 }
 

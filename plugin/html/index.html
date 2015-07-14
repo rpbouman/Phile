@@ -171,8 +171,16 @@
     <script>
       var phile = new Phile();
 
+      function failure (xhr, options, exception){
+        alert("Error: " + JSON.stringify(exception));
+      }
+
       function openDocTab(){
         top.openURL("Phile API Docs", "phile-api-docs", "content/phile/doc/api/index.html");
+      }
+
+      function sortFiles(files){
+        files.sort(Phile.compareFilesCaseInsensitive);
       }
 
       function getChildrenForPath(path){
@@ -182,16 +190,14 @@
             if (!data) {
               return;
             }
-            var items = data.repositoryFileDto, i , n = items.length, item;
-            items.sort(Phile.compareFilesCaseInsensitive);
+            var files = data.repositoryFileDto, i , n = files.length, file;
+            sortFiles(files);
             for (i = 0; i < n; i++){
-              item = items[i];
-              createTreeNode(item);
+              file = files[i];
+              createTreeNode(file);
             }
           },
-          failure: function(options, xhr, exception) {
-            alert("Error: " + JSON.stringify(exception));
-          }
+          failure: failure
         });
       }
 
@@ -258,9 +264,7 @@
             top.innerHTML = "";
             displayProperties(data, top);
           },
-          failure: function(options, xhr, data){
-            alert("Error: " + JSON.stringify(exception));
-          }
+          failure: failure
         });
 
         var bottom = document.getElementById("bottom");
@@ -275,9 +279,7 @@
             success: function(options, xhr, data) {
               displayContents(options.path, xhr.responseText, bottom);
             },
-            failure: function(options, xhr, exceptions){
-              alert("Error: " + JSON.stringify(exception));
-            }
+            failure: failure
           });
         }
 
@@ -309,9 +311,7 @@
             selected.setAttribute("data-state", "expanded");
             getChildrenForPath(path);
           },
-          failure: function(xhr, options, exception){
-            alert("Error: " + JSON.stringify(exception));
-          }
+          failure: failure
         });
       }
 
@@ -329,17 +329,28 @@
             selected.setAttribute("data-state", "expanded");
             getChildrenForPath(path);
           },
-          failure: function(xhr, options, exception){
-            alert("Error: " + JSON.stringify(exception));
-          }
+          failure: failure
         });
       }
 
       function deleteSelected(){
-
+        if (!selected) {
+          return;
+        }
+        var path = selected.id;
+        if (!confirm("Are you sure you want to discard " + path + "?")) {
+          return;
+        }
+        phile.discard({
+          path: path,
+          success: function(options, xhr, data) {
+            selected.parentNode.removeChild(selected);
+          },
+          failure: failure
+        });
       }
 
-      function createTreeNode(conf){
+      function createTreeNode(conf, state){
         var spacer = "&#160;&#160;&#160;&#160;&#160;&#160;";
         //the node itself
         var node = document.createElement("DIV");
@@ -352,13 +363,13 @@
         else
         if (conf.folder === "true") {
           classNames.push("folder");
+          node.setAttribute("data-state", state || "collapsed");
         }
         else {
           classNames.push("file");
         }
 
         node.className = classNames.join(" ");
-        node.setAttribute("data-state", "collapsed");
 
         //the node head
         var head = document.createElement("DIV");
@@ -406,7 +417,49 @@
         return node;
       }
 
-      getChildrenForPath("");
+      function createTreeBranch(item, pathComponents, level) {
+        if (typeof(level) === "undefined") {
+          level = 0;
+        }
+        var pathComponent = pathComponents[level++];
+        var file = item.file;
+        if (file.path !== Phile.separator) {
+          createTreeNode(file, file.name === pathComponent ? "expanded" : "collapsed");
+        }
+        var files = item.children;
+        if (files) {
+          sortFiles(files);
+          var i, n = files.length, file;
+          for (i = 0; i < n; i++){
+            file = files[i];
+            createTreeBranch(file, pathComponents, level);
+          }
+        }
+      }
+
+      //build the file tree
+      //getChildrenForPath("");
+      function createFileTree(homeDirectory) {
+        var pathComponents = homeDirectory.split(Phile.separator);
+        phile.getTree({
+          path: pathComponents[0],
+          depth: pathComponents.length,
+          success: function(options, xhr, data) {
+            createTreeBranch(data, pathComponents);
+          },
+          failure: failure
+        });
+      }
+
+
+      //get the user home directory
+      phile.getUserHomeDir({
+        success: function(options, xhr, data){
+          var dir = data.substr(0, data.indexOf("/workspace"));
+          createFileTree(dir);
+        },
+        failure: failure
+      });
     </script>
   </body>
 </html>

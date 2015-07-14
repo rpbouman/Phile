@@ -104,7 +104,8 @@
 <div class="box intro">
     <p>The Phile class provides a javascript API to work with Pentaho files.
 The optional options parameter sets standard options for this Phile instance.
-   Any global options present in Phile.options are applied if not present in options.</p>
+   Any global options present in Phile.options are applied if not present in options.
+   Please checkout the <code><a href="#property_defaultOptions">defaultOptions</a></code> property to see the supported options.</p>
 
 </div>
 
@@ -226,6 +227,20 @@ The optional options parameter sets standard options for this Phile instance.
                     <ul class="index-list methods">
                         
                             <li class="index-item method">
+                                <a href="#method_createDirectory">createDirectory</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_discard">discard</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_getChildren">getChildren</a>
 
                                 
@@ -233,7 +248,56 @@ The optional options parameter sets standard options for this Phile instance.
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_getContents">getContents</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getProperties">getProperties</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getTrash">getTrash</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getTree">getTree</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getTree">getTree</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getUserHomeDir">getUserHomeDir</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_request">request</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_saveFile">saveFile</a>
 
                                 
                                 
@@ -250,7 +314,34 @@ The optional options parameter sets standard options for this Phile instance.
                     <ul class="index-list properties">
                         
                             <li class="index-item property">
+                                <a href="#property_compareFilesCaseSensitive">compareFilesCaseSensitive</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_compareFilesCaseSensitive">compareFilesCaseSensitive</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_defaultOptions">defaultOptions</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_separator">separator</a>
 
                                 
                                     <span class="flag static">static</span>
@@ -270,6 +361,196 @@ The optional options parameter sets standard options for this Phile instance.
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_createDirectory" class="method item">
+    <h3 class="name"><code>createDirectory</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l586"><code>src&#x2F;Phile.js:586</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method creates a new directory.
+Specific properties: <dl>
+  <dt><code>path</code></dt>
+  <dd>Specifies the path of the new directory</dd>
+</dl></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the path for the new directory and the callbacks to be notified.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_discard" class="method item">
+    <h3 class="name"><code>discard</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l633"><code>src&#x2F;Phile.js:633</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Discards the file or directory.
+Specific properties: <dl>
+  <dt><code>id</code></dt>
+  <dd>String (optional). The guid of the file or directory to remove.</dd>
+  <dt><code>path</code></dt>
+  <dd>String (optional). The path of the file or directory to remove.</dd>
+  <dt><code>permanent</code></dt>
+  <dd>Boolena (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>
+</dl></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the callbacks to be notified.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="method_getChildren" class="method item">
@@ -314,7 +595,7 @@ The optional options parameter sets standard options for this Phile instance.
             
         
         
-        <a href="../files/src_Phile.js.html#l262"><code>src&#x2F;Phile.js:262</code></a>
+        <a href="../files/src_Phile.js.html#l360"><code>src&#x2F;Phile.js:360</code></a>
         
         </p>
 
@@ -327,10 +608,14 @@ The optional options parameter sets standard options for this Phile instance.
     <div class="description">
         <p>This method can be used to get the contents of a directory.
 The method is passed a configuration object to specify callbacks and the path from where to get children from.
-The configuration object supports all generic configuration properties as documented in the <code><a href="method_request">request()</a></code> method.
+The configuration object supports all generic configuration properties as documented in the <code><a href="#method_request">request()</a></code> method.
 Specific properties: <dl>
   <dt><code>path</code></dt>
   <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>showHidden</code></dt>
+  <dd>Boolean to specify whether hidden files should be included in the response</dd>
+  <dt><code>filter</code></dt>
+  <dd>String to specify a search string to filter the result.</dd>
 </dl>
 The response object passed back to the <code>success</code> callback has one property <code>repositoryFileDto</code>.
 This is an array representing the list of children. Array items have the following properties: <dl>
@@ -381,6 +666,8 @@ This is an array representing the list of children. Array items have the followi
   <dd>The title for presenting this node to the user.</dd>
   <dt><code>versioned</code></dt>
   <dd>String <code>&quot;true&quot;</code> or <code>&quot;false&quot;</code> to flag if this is node is versioned or not.</dd>
+  <dt><code>versionId</code></dt>
+  <dd>If the file is versioned, the <code>versionId</code> property is present and its value is a String that represents the version number.</dd>
 </dl></p>
 
     </div>
@@ -401,6 +688,581 @@ This is an array representing the list of children. Array items have the followi
 
                     <div class="param-description">
                         <p>Object specifies where to get children from</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getContents" class="method item">
+    <h3 class="name"><code>getContents</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l512"><code>src&#x2F;Phile.js:512</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method can be used to get the contents of a particular file.
+The configuration object supports all generic configuration properties as documented in the <code><a href="#method_request">request()</a></code> method.
+Specific properties: <dl>
+  <dt><code>path</code></dt>
+  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+</dl>
+Phile is not aware of content types, so callers are responsible for setting an appropriate mime type in the <code>Accept</code> HTTP-header.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Object specifies where and how to get a tree of file objects from.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getProperties" class="method item">
+    <h3 class="name"><code>getProperties</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l540"><code>src&#x2F;Phile.js:540</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method can be used to get properties (metadata) of a particular file or directory.
+The method takes a single <code>path</code> argument to specify which file to download,
+and which callbacks to notify when the properties are received.
+The configuration object supports all generic configuration properties as documented in the <code><a href="#method_request">request()</a></code> method.
+Specific properties: <dl>
+  <dt><code>path</code></dt>
+  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+</dl>
+The properties object that is returned to the callback has the same structure as the items returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the node for which to get properties and the callbacks to be notified.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getTrash" class="method item">
+    <h3 class="name"><code>getTrash</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l495"><code>src&#x2F;Phile.js:495</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get the contents of the trash bin.
+The response object passed back to the <code>success</code> is an array of <code>repositoryFileDto</code> objects.
+The structure of these objects are described by the <a href="#method_getChildren"><code>getChildren</code></a> method.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Object specifies callbacks.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getTree" class="method item">
+    <h3 class="name"><code>getTree</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l456"><code>src&#x2F;Phile.js:456</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method can be used to get the entire tree of files.
+The configuration object supports all generic configuration properties as documented in the <code><a href="#method_request">request()</a></code> method.
+Specific properties: <dl>
+  <dt><code>path</code></dt>
+  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>showHidden</code></dt>
+  <dd>Boolean to specify whether hidden files should be included in the response</dd>
+  <dt><code>filter</code></dt>
+  <dd>String to specify a search string to filter the result.</dd>
+  <dt><code>depth</code></dt>
+  <dd>Integer. Specifies the number of levels to traverse. Default: <code>1</code>.</dd>
+</dl>
+The response object passed back to the <code>success</code> callback has two properties: <dl>
+  <dt><code>file</code></dt>
+  <dd>The <code>file</code> property is an object type which holds the properties of the file that is the root of the tree, i.e. the properties of the file identified by the path specified in the argument <code>conf</code> object.</dd>
+  <dt><code>children</code></dt>
+  <dd>
+    Optional. The <code>children</code> property is an array of objects representing the children of the file identified by the path specified in the argument <code>conf</code> object.
+    Each of these objects again has a <code>file</code> property, and optionally, a <code>children</code> property.
+  </dd>
+</dl>.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Object specifies where and how to get a tree of file objects from.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getTree" class="method item">
+    <h3 class="name"><code>getTree</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>path</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l529"><code>src&#x2F;Phile.js:529</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method can be used to get a url to download a particular file.
+The method takes a single <code>path</code> argument to specify which file to download.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">path</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Path specifies which file to download. Can be specified as a string or an array of path components.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getUserHomeDir" class="method item">
+    <h3 class="name"><code>getUserHomeDir</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l612"><code>src&#x2F;Phile.js:612</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get the home directory of a user.
+Specific properties: <dl>
+  <dt><code>user</code></dt>
+  <dd>String (optional). Specifies the user for which to get the home directory. If the user is omitted, it gets the home directory of the current user.</dd>
+</dl></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the callbacks to be notified.</p>
 
                     </div>
 
@@ -463,7 +1325,7 @@ This is an array representing the list of children. Array items have the followi
             
         
         
-        <a href="../files/src_Phile.js.html#l206"><code>src&#x2F;Phile.js:206</code></a>
+        <a href="../files/src_Phile.js.html#l301"><code>src&#x2F;Phile.js:301</code></a>
         
         </p>
 
@@ -476,11 +1338,11 @@ This is an array representing the list of children. Array items have the followi
     <div class="description">
         <p>This is the core method to do a request to the Pentaho file service.
 Normally, you do not need to use this method directy, rather use a specific method like
-<code><a href="method_getChildren">getChildren()</a></code>,
-<code><a href="method_getTree">getTree()</a></code>,
-<code><a href="method_getContents">getContents()</a></code>,
-<code><a href="method_getProperties">getProperties()</a></code>,
-or <code><a href="method_save">save()</a></code>.</p>
+<code><a href="#method_getChildren">getChildren()</a></code>,
+<code><a href="#method_getTree">getTree()</a></code>,
+<code><a href="#method_getContents">getContents()</a></code>,
+<code><a href="#method_getProperties">getProperties()</a></code>,
+or <code><a href="#method_save">save()</a></code>.</p>
 <p>The method takes one <code>conf</code> argument which represents the message to send to the service.
 The <code>conf</code> argument supports the following generic properties:</p>
 <dl>
@@ -509,9 +1371,13 @@ The <code>conf</code> argument supports the following generic properties:</p>
   <dt><code>scope</code></dt>
   <dd>The scope to use for the callbacks (defaults to null).</dd>
   <dt><code>headers</code></dt>
-  <dd>An object to hold any HTTP request headers.</dd>
+  <dd>
+     An object to hold any HTTP request headers. The property names of this object are used as HTTP header names, and property values are used as the corresponding header values.
+  </dd>
   <dt><code>params</code></dt>
-  <dd>An object to hold any HTTP query parameters.</dd>
+  <dd>An object to hold any HTTP query parameters. The property names of this object are used as parameter names, and their corresponding values as parameter values.</dd>
+  <dt><code>data</code></dt>
+  <dd>The message body to send to the server.</dd>
 </dl>
     </div>
 
@@ -559,12 +1425,201 @@ The <code>conf</code> argument supports the following generic properties:</p>
 </div>
 
                 
+                    <div id="method_saveFile" class="method item">
+    <h3 class="name"><code>saveFile</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l599"><code>src&#x2F;Phile.js:599</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>This method can be used to save a file to the repository.
+Specific properties: <dl>
+  <dt><code>path</code></dt>
+  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+</dl></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the path for the new file and the callbacks to be notified.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
             </div>
         
 
         
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_compareFilesCaseSensitive" class="property item">
+    <h3 class="name"><code>compareFilesCaseSensitive</code></h3>
+    <span class="type">Unknown</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l199"><code>src&#x2F;Phile.js:199</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Case-sensitive file sort function.
+Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_compareFilesCaseSensitive" class="property item">
+    <h3 class="name"><code>compareFilesCaseSensitive</code></h3>
+    <span class="type">Unknown</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l238"><code>src&#x2F;Phile.js:238</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Case-insensitive file sort function.
+Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="property_defaultOptions" class="property item">
@@ -592,7 +1647,7 @@ The <code>conf</code> argument supports the following generic properties:</p>
             
         
         
-        <a href="../files/src_Phile.js.html#l162"><code>src&#x2F;Phile.js:162</code></a>
+        <a href="../files/src_Phile.js.html#l163"><code>src&#x2F;Phile.js:163</code></a>
         
         </p>
 
@@ -606,10 +1661,61 @@ The <code>conf</code> argument supports the following generic properties:</p>
 These can always be overriden by passing an options object to the constructor
 It sets the following properties:</p>
 <ul>
-  <li><code>requestTimeout</code> int: 30000 - number of milliseconds before a request to the Pentaho repository service will timeout </li>
-  <li><code>async</code> boolean: true - determines whether synchronous or asynchronous communication will be used.</li>
-  <li><code>webapp</code> String: &quot;/pentaho/api/repo/files/&quot; - The entry point for the file REST service. You might need to change this if you changed the default name of the pentaho web application.</li>
+  <li><code>requestTimeout</code> int: <code>30000</code> - number of milliseconds before a request to the Pentaho repository service will timeout </li>
+  <li><code>async</code> boolean: <code>true</code> - determines whether synchronous or asynchronous communication will be used.</li>
+  <li><code>webapp</code> String: <code>&quot;pentaho&quot;</code> - Name of the pentaho web application. You might need to change this if you changed the default name of the pentaho web application.</li>
+  <li><code>mountPoint</code> String: <code>&quot;api&quot;</code> - Root of all api webservices. Probably won&#39;t need to change this ever.</li>
+  <li><code>dirService</code> String: <code>&quot;repo/dirs&quot;</code> - Entrypoint for the dirs webservices. See <a href="http://javadoc.pentaho.com/bi-platform500/webservice500/resource_DirectoryResource.html">http://javadoc.pentaho.com/bi-platform500/webservice500/resource_DirectoryResource.html</a>
+  <li><code>fileService</code> String: <code>&quot;repo/files&quot;</code> - Entrypoint for the files webservices. See: <a href="http://javadoc.pentaho.com/bi-platform500/webservice500/resource_FileResource.html"><a href="http://javadoc.pentaho.com/bi-platform500/webservice500/resource_FileResource.html">http://javadoc.pentaho.com/bi-platform500/webservice500/resource_FileResource.html</a></a></li>
+  <li><code>sessionService</code> String: <code>&quot;session&quot;</code> - Entrypoint for the session webservices. See: <a href="http://javadoc.pentaho.com/bi-platform500/webservice500/resource_SessionResource.html"><a href="http://javadoc.pentaho.com/bi-platform500/webservice500/resource_SessionResource.html">http://javadoc.pentaho.com/bi-platform500/webservice500/resource_SessionResource.html</a></a></li>
 </ul>
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_separator" class="property item">
+    <h3 class="name"><code>separator</code></h3>
+    <span class="type">String</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l191"><code>src&#x2F;Phile.js:191</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Separator between path components.</p>
+
     </div>
 
     

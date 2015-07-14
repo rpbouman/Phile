@@ -234,6 +234,13 @@ The optional options parameter sets standard options for this Phile instance.
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_discard">discard</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_getChildren">getChildren</a>
 
                                 
@@ -255,6 +262,13 @@ The optional options parameter sets standard options for this Phile instance.
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_getTrash">getTrash</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_getTree">getTree</a>
 
                                 
@@ -263,6 +277,13 @@ The optional options parameter sets standard options for this Phile instance.
                         
                             <li class="index-item method">
                                 <a href="#method_getTree">getTree</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getUserHomeDir">getUserHomeDir</a>
 
                                 
                                 
@@ -384,7 +405,7 @@ The optional options parameter sets standard options for this Phile instance.
             
         
         
-        <a href="../files/src_Phile.js.html#l542"><code>src&#x2F;Phile.js:542</code></a>
+        <a href="../files/src_Phile.js.html#l586"><code>src&#x2F;Phile.js:586</code></a>
         
         </p>
 
@@ -419,6 +440,103 @@ Specific properties: <dl>
 
                     <div class="param-description">
                         <p>Specifies the path for the new directory and the callbacks to be notified.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_discard" class="method item">
+    <h3 class="name"><code>discard</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l633"><code>src&#x2F;Phile.js:633</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Discards the file or directory.
+Specific properties: <dl>
+  <dt><code>id</code></dt>
+  <dd>String (optional). The guid of the file or directory to remove.</dd>
+  <dt><code>path</code></dt>
+  <dd>String (optional). The path of the file or directory to remove.</dd>
+  <dt><code>permanent</code></dt>
+  <dd>Boolena (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>
+</dl></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the callbacks to be notified.</p>
 
                     </div>
 
@@ -477,7 +595,7 @@ Specific properties: <dl>
             
         
         
-        <a href="../files/src_Phile.js.html#l344"><code>src&#x2F;Phile.js:344</code></a>
+        <a href="../files/src_Phile.js.html#l360"><code>src&#x2F;Phile.js:360</code></a>
         
         </p>
 
@@ -494,6 +612,10 @@ The configuration object supports all generic configuration properties as docume
 Specific properties: <dl>
   <dt><code>path</code></dt>
   <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>showHidden</code></dt>
+  <dd>Boolean to specify whether hidden files should be included in the response</dd>
+  <dt><code>filter</code></dt>
+  <dd>String to specify a search string to filter the result.</dd>
 </dl>
 The response object passed back to the <code>success</code> callback has one property <code>repositoryFileDto</code>.
 This is an array representing the list of children. Array items have the following properties: <dl>
@@ -624,7 +746,7 @@ This is an array representing the list of children. Array items have the followi
             
         
         
-        <a href="../files/src_Phile.js.html#l468"><code>src&#x2F;Phile.js:468</code></a>
+        <a href="../files/src_Phile.js.html#l512"><code>src&#x2F;Phile.js:512</code></a>
         
         </p>
 
@@ -719,7 +841,7 @@ Phile is not aware of content types, so callers are responsible for setting an a
             
         
         
-        <a href="../files/src_Phile.js.html#l496"><code>src&#x2F;Phile.js:496</code></a>
+        <a href="../files/src_Phile.js.html#l540"><code>src&#x2F;Phile.js:540</code></a>
         
         </p>
 
@@ -758,6 +880,97 @@ The properties object that is returned to the callback has the same structure as
 
                     <div class="param-description">
                         <p>Specifies the node for which to get properties and the callbacks to be notified.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getTrash" class="method item">
+    <h3 class="name"><code>getTrash</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l495"><code>src&#x2F;Phile.js:495</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get the contents of the trash bin.
+The response object passed back to the <code>success</code> is an array of <code>repositoryFileDto</code> objects.
+The structure of these objects are described by the <a href="#method_getChildren"><code>getChildren</code></a> method.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Object specifies callbacks.</p>
 
                     </div>
 
@@ -816,7 +1029,7 @@ The properties object that is returned to the callback has the same structure as
             
         
         
-        <a href="../files/src_Phile.js.html#l429"><code>src&#x2F;Phile.js:429</code></a>
+        <a href="../files/src_Phile.js.html#l456"><code>src&#x2F;Phile.js:456</code></a>
         
         </p>
 
@@ -832,9 +1045,22 @@ The configuration object supports all generic configuration properties as docume
 Specific properties: <dl>
   <dt><code>path</code></dt>
   <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>showHidden</code></dt>
+  <dd>Boolean to specify whether hidden files should be included in the response</dd>
+  <dt><code>filter</code></dt>
+  <dd>String to specify a search string to filter the result.</dd>
   <dt><code>depth</code></dt>
   <dd>Integer. Specifies the number of levels to traverse. Default: <code>1</code>.</dd>
-</dl></p>
+</dl>
+The response object passed back to the <code>success</code> callback has two properties: <dl>
+  <dt><code>file</code></dt>
+  <dd>The <code>file</code> property is an object type which holds the properties of the file that is the root of the tree, i.e. the properties of the file identified by the path specified in the argument <code>conf</code> object.</dd>
+  <dt><code>children</code></dt>
+  <dd>
+    Optional. The <code>children</code> property is an array of objects representing the children of the file identified by the path specified in the argument <code>conf</code> object.
+    Each of these objects again has a <code>file</code> property, and optionally, a <code>children</code> property.
+  </dd>
+</dl>.</p>
 
     </div>
 
@@ -912,7 +1138,7 @@ Specific properties: <dl>
             
         
         
-        <a href="../files/src_Phile.js.html#l485"><code>src&#x2F;Phile.js:485</code></a>
+        <a href="../files/src_Phile.js.html#l529"><code>src&#x2F;Phile.js:529</code></a>
         
         </p>
 
@@ -944,6 +1170,99 @@ The method takes a single <code>path</code> argument to specify which file to do
 
                     <div class="param-description">
                         <p>Path specifies which file to download. Can be specified as a string or an array of path components.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_getUserHomeDir" class="method item">
+    <h3 class="name"><code>getUserHomeDir</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l612"><code>src&#x2F;Phile.js:612</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get the home directory of a user.
+Specific properties: <dl>
+  <dt><code>user</code></dt>
+  <dd>String (optional). Specifies the user for which to get the home directory. If the user is omitted, it gets the home directory of the current user.</dd>
+</dl></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the callbacks to be notified.</p>
 
                     </div>
 
@@ -1006,7 +1325,7 @@ The method takes a single <code>path</code> argument to specify which file to do
             
         
         
-        <a href="../files/src_Phile.js.html#l285"><code>src&#x2F;Phile.js:285</code></a>
+        <a href="../files/src_Phile.js.html#l301"><code>src&#x2F;Phile.js:301</code></a>
         
         </p>
 
@@ -1148,7 +1467,7 @@ The <code>conf</code> argument supports the following generic properties:</p>
             
         
         
-        <a href="../files/src_Phile.js.html#l555"><code>src&#x2F;Phile.js:555</code></a>
+        <a href="../files/src_Phile.js.html#l599"><code>src&#x2F;Phile.js:599</code></a>
         
         </p>
 
@@ -1280,7 +1599,7 @@ Can be passed to the Array <code>sort</code> function to sort an array of files 
             
         
         
-        <a href="../files/src_Phile.js.html#l230"><code>src&#x2F;Phile.js:230</code></a>
+        <a href="../files/src_Phile.js.html#l238"><code>src&#x2F;Phile.js:238</code></a>
         
         </p>
 
