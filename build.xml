@@ -3,7 +3,10 @@
     Pentaho Files
   </description>
 
+  <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask" classpath="/usr/share/java/closure-compiler.jar"/>
+
   <property name="dist" location="dist"/>
+  <property name="src" location="src"/>
   <property name="plugin" location="plugin"/>
   <property name="plugin-html" location="${plugin}/html"/>
   <property name="plugin-js" location="${plugin}/js"/>
@@ -16,10 +19,27 @@
     <mkdir dir="${build}"/>
   </target>
 
-  <target name="dist" depends="clean" description="generate the distribution" >
+  <target name="compile-phile">
+    <jscomp compilationLevel="simple" warning="verbose" debug="false" output="${dist}/Phile-compiled.js">
+
+      <externs dir="${src}">
+        <file name="externs.js"/>
+      </externs>
+
+      <sources dir="${src}">
+        <file name="Phile.js"/>
+      </sources>
+
+    </jscomp>
+  </target>
+
+  <target name="dist" depends="clean,compile-phile" description="generate the distribution" >
     <copy todir="${plugin}/js">
       <fileset dir="src">
         <include name="Phile.js"/>
+      </fileset>
+      <fileset dir="dist">
+        <include name="Phile-compiled.js"/>
       </fileset>
     </copy>
 

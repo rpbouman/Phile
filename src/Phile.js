@@ -189,7 +189,7 @@ var Phile = function(options) {
 *
 *  @property defaultOptions
 *  @static
-*  @type object
+*  @type Object
 **/
 Phile.defaultOptions = {
   requestTimeout: 30000,      //by default, we bail out after 30 seconds
