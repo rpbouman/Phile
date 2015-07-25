@@ -37,31 +37,54 @@
         bottom: 0px;
       }
 
-      .header, .left, .right, .top, .bottom {
-        border-color: lightgrey;
+      .my-toolbar, .left, .right, .top, .bottom {
+        border-color: darkgrey;
         margin: 0px;
         padding: 0px;
       }
 
-      .header {
+      .my-toolbar {
         position: absolute;
         top: 0px;
         left: 0px;
         right: 0px;
-        height: 50px;
+        height: 25px;
         margin: 0px;
-        padding: 0px;
+        padding: 2px;
         border-width: 2px;
         border-bottom-style: solid
+      }
+
+      .title {
+        position: absolute;
+        top: 0px;
+        left: 1px;
+        right: 0px;
+        height: 20px;
+        background-color: blue;
+        color: white;
+        font-weight: bold;
+        padding-left: 2px;
+      }
+
+      .content {
+        position: absolute;
+        top: 20px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        overflow: auto;
+        margin: 0px;
+        padding:0px;
       }
 
       .left, .right {
         position: absolute;
         width: 50%;
-        top: 50px;
+        top: 25px;
         bottom: 0px;
         border-width: 1px;
-        overflow: auto;
+        border-top-style: solid;
       }
 
       .left {
@@ -71,7 +94,6 @@
 
       .right {
         right: 0px;
-        border-left-style: solid;
       }
 
       .top, .bottom {
@@ -92,22 +114,26 @@
         bottom: 0px;
         border-top-style: solid;
       }
+
+      #contents-download:link {
+        color: red;
+      }
     </style>
 
     <style type="text/css">
       .tree {
       }
 
-      .tree .node {
+      .node {
         cursor: default;
       }
 
-      .tree .node > .head {
+      .node > .head {
         white-space: nowrap;
       }
 
-      .tree .node > .head > .toggle,
-      .tree .node > .head > .icon {
+      .node > .head > .toggle,
+      .node > .head > .icon {
         background-repeat: no-repeat;
       }
 
@@ -123,29 +149,33 @@
         background-image: url(../../common-ui/resources/themes/crystal/images/arrow_open.png);
       }
 
-      .tree .file > .head > .icon {
+      .file > .head > .icon {
         background-image: url(../../common-ui/resources/themes/crystal/images/file_generic.png);
       }
 
-      .tree .folder[data-state=collapsed] > .head > .icon {
+      .folder[data-state=collapsed] > .head > .icon {
         background-image: url(../../common-ui/resources/themes/crystal/images/folder_closed.png);
       }
 
-      .tree .folder[data-state=expanded] > .head > .icon {
+      .folder[data-state=expanded] > .head > .icon {
         background-image: url(../../common-ui/resources/themes/crystal/images/folder_open.png);
       }
 
-      .tree .node > .body {
+      .node > .body {
         padding-left: 20px;
       }
 
-      .tree .node[data-state=collapsed] > .body {
+      .node[data-state=collapsed] > .body {
         display: none
       }
 
-      .tree .node[data-selected=true] > .head {
+      .node[data-selected=true] > .head {
         background-color: lightblue;
         color: white;
+      }
+
+      .node[data-home=true] > .head {
+        font-weight: bold;
       }
 
     </style>
@@ -153,23 +183,55 @@
   <body>
 
     <div class="main">
-      <div class="header">
+      <div class="my-toolbar">
         <button disabled="true" id="btnNewFile" onclick="newFile()">New File</button>
         <button disabled="true" id="btnNewDirectory" onclick="newDirectory()">New Directory</button>
+        <button disabled="true" id="btnRename" onclick="renameSelected()">Rename</button>
         <button disabled="true" id="btnDelete" onclick="deleteSelected()">Delete</button>
+        <button disabled="true" id="btnRestore" onclick="restoreSelected()">Restore</button>
         <button id="btnApiDocs" onclick="openDocTab()">API Docs</button>
       </div>
-      <div id="tree" class="tree left">
+      <div class="left">
+        <div id="tree" class="top">
+          <div class="title">Treeview:</div>
+          <div id="tree-nodes" class="tree content">
+          </div>
+        </div>
+        <div id="trash" class="bottom">
+          <div class="title">Trash:</div>
+          <div id="trash-nodes" class="content">
+          </div>
+        </div>
       </div>
       <div class="right">
-        <pre id="top" class="top"></pre>
-        <div id="bottom" class="bottom"></div>
+        <div id="properties" class="top">
+          <div class="title">Properties:</div>
+          <pre id="properties-text" class="content">
+          </pre>
+        </div>
+        <div id="contents" class="bottom">
+          <div class="title">Contents&#160;-&#160;Download: <a id="contents-download"></a></div>
+          <pre id="contents-text" class="content">
+          </pre>
+        </div>
       </div>
     </div>
 
     <script src="../js/Phile.js" type="text/javascript"></script>
     <script>
       var phile = new Phile();
+
+      function getFileNodeProperties(element) {
+        var properties = element.getAttribute("data-conf");
+        properties = JSON.parse(properties);
+        return properties;
+      }
+
+      function getFileNodePath(element) {
+        var properties = getFileNodeProperties(element);
+        var path = properties.path;
+        return path;
+      }
 
       function failure (xhr, options, exception){
         alert("Error: " + JSON.stringify(exception));
@@ -180,7 +242,7 @@
       }
 
       function sortFiles(files){
-        files.sort(Phile.compareFilesCaseInsensitive);
+        files.sort(Phile.compareFilesByTitleCI);
       }
 
       function getChildrenForPath(path){
@@ -213,12 +275,9 @@
           case "collapsed":
             var body = head.nextSibling;
             if (body.childNodes.length === 0) {
-              var path;
-              if (node.id === "/") {
+              var path = getFileNodePath(node);
+              if (path === "/") {
                 path = "";
-              }
-              else {
-                path = node.id;
               }
               getChildrenForPath(path);
             }
@@ -237,15 +296,13 @@
         dom.innerHTML = escapeHtml(text);
       }
 
-      function displayContents(path, contents, dom){
-        var a = document.createElement("A");
+      function displayContents(path, contents){
+        var a = document.getElementById("contents-download");
         a.textContent = path;
         a.href = phile.getUrlForDownload(path);
-        dom.appendChild(a);
 
-        var pre = document.createElement("PRE");
-        pre.innerHTML = escapeHtml(contents);
-        dom.appendChild(pre);
+        var contentsText = document.getElementById("contents-text");
+        contentsText.innerHTML = escapeHtml(contents);
       }
 
       var selected = null;
@@ -257,35 +314,50 @@
         var head = this.parentNode;
         var node = head.parentNode;
 
-        phile.getProperties({
-          path: node.id,
-          success: function(options, xhr, data){
-            var top = document.getElementById("top");
-            top.innerHTML = "";
-            displayProperties(data, top);
-          },
-          failure: failure
-        });
-
-        var bottom = document.getElementById("bottom");
-        bottom.innerHTML = "";
-        var isFile = (node.className.indexOf("folder") === -1);
-        if (isFile) {
-          phile.getContents({
-            path: node.id,
-            headers: {
-              Accept: "text/plain"
-            },
-            success: function(options, xhr, data) {
-              displayContents(options.path, xhr.responseText, bottom);
+        var isDeleted;
+        if (node.parentNode.id === "trash-nodes") {
+          isDeleted = true;
+          var propertiesText = document.getElementById("properties-text");
+          var properties = getFileNodeProperties(node);
+          properties = JSON.stringify(properties, null, " ");
+          propertiesText.innerHTML = properties;
+        }
+        else {
+          isDeleted = false;
+          phile.getProperties({
+            path: getFileNodePath(node),
+            success: function(options, xhr, data){
+              var propertiesText = document.getElementById("properties-text");
+              propertiesText.innerHTML = "";
+              displayProperties(data, propertiesText);
             },
             failure: failure
           });
-        }
 
+          var contentsText = document.getElementById("contents-text");
+          contentsText.innerHTML = "";
+          var a = document.getElementById("contents-download");
+          a.innerHTML = "";
+
+          var isFile = (node.className.indexOf("folder") === -1);
+          if (isFile) {
+            phile.getContents({
+              path: getFileNodePath(node),
+              headers: {
+                Accept: "text/plain"
+              },
+              success: function(options, xhr, data) {
+                displayContents(options.path, xhr.responseText);
+              },
+              failure: failure
+            });
+          }
+        }
+        document.getElementById("btnNewFile").disabled = isDeleted || isFile;
+        document.getElementById("btnNewDirectory").disabled = isDeleted || isFile;
+        document.getElementById("btnRestore").disabled = !isDeleted;
+        document.getElementById("btnRename").disabled = isDeleted;
         document.getElementById("btnDelete").disabled = false;
-        document.getElementById("btnNewFile").disabled = isFile;
-        document.getElementById("btnNewDirectory").disabled = isFile;
 
         selected = node;
         selected.setAttribute("data-selected", true);
@@ -293,13 +365,15 @@
       }
 
       function newFile(){
-        var path = selected.id;
+        var path = getFileNodePath(selected);
         var name = prompt("Please enter a name for your new file", "new file");
         if (name === null) {
+          alert("You did not enter a name. Action will be canceled.");
           return;
         }
         var contents = prompt("Please enter some contents for your new file", "Some contents");
         if (contents === null) {
+          alert("You did not enter any file contents. Action will be canceled.");
           return;
         }
         var newPath = path + "/" + name;
@@ -316,9 +390,10 @@
       }
 
       function newDirectory(){
-        var path = selected.id;
+        var path = getFileNodePath(selected);
         var name = prompt("Please enter a name for your new directory.", "new directory");
         if (name === null) {
+          alert("You did not enter a name. Action will be canceled.");
           return;
         }
         var newPath = path + "/" + name;
@@ -333,27 +408,75 @@
         });
       }
 
-      function deleteSelected(){
+      function renameSelected(){
         if (!selected) {
           return;
         }
-        var path = selected.id;
-        if (!confirm("Are you sure you want to discard " + path + "?")) {
+        var newName = prompt("Please enter a new name for this file.", "new name");
+        if (newName === null) {
+          alert("You did not enter a name. Action will be canceled.");
           return;
         }
-        phile.discard({
+        var path = getFileNodePath(selected);
+        phile.rename({
           path: path,
-          success: function(options, xhr, data) {
-            selected.parentNode.removeChild(selected);
+          newName: newName,
+          success: function(options, xhr, data){
+            debugger;
           },
           failure: failure
         });
       }
 
-      function createTreeNode(conf, state){
+      function deleteSelected(){
+        if (!selected) {
+          return;
+        }
+        var request = {
+          success: function(options, xhr, data) {
+            selected.parentNode.removeChild(selected);
+            loadTrash();
+          },
+          failure: failure
+        };
+        var message, permanent;
+        var properties = getFileNodeProperties(selected);
+        var path = properties.path;
+        if (selected.parentNode.id === "trash-nodes") {
+          message = "Are you sure you want to permanently remove ";
+          request.permanent = true;
+          request.id = properties.id;
+        }
+        else {
+          request.path = path,
+          message = "Are you sure you want to discard ";
+        }
+        if (!confirm(message + path + "?")) {
+          return;
+        }
+        phile.discard(request);
+      }
+
+      function restoreSelected(){
+        if (!selected) {
+          return;
+        }
+        var properties = getFileNodeProperties(selected);
+        phile.restore({
+          file: properties,
+          success: function(options, xhr, data){
+            var path = properties.originalParentFolderPath + Phile.separator + properties.name;
+            createFileTree(path);
+            loadTrash();
+          },
+          failure: failure
+        });
+      }
+
+      function createFileNode(conf, state){
         var spacer = "&#160;&#160;&#160;&#160;&#160;&#160;";
-        //the node itself
         var node = document.createElement("DIV");
+        node.id = conf.path;
         node.setAttribute("data-conf", JSON.stringify(conf));
 
         var classNames = ["node"];
@@ -368,7 +491,6 @@
         else {
           classNames.push("file");
         }
-
         node.className = classNames.join(" ");
 
         //the node head
@@ -394,6 +516,13 @@
 
         node.appendChild(head);
 
+        return node;
+      }
+
+      function createTreeNode(conf, state){
+        //the node itself
+        var node = createFileNode(conf, state);
+
         //the node body
         var body = document.createElement("DIV");
         body.className = "body";
@@ -403,10 +532,9 @@
         var path = conf.path, lastIndex = conf.path.lastIndexOf("/");
         var parentNode, parentId;
 
-        node.id = path;
         parentId = path.substr(0, lastIndex);
         if (parentId === "") {
-          parentNode = document.getElementById("tree");
+          parentNode = document.getElementById("tree-nodes");
         }
         else {
           parentNode = document.getElementById(parentId);
@@ -424,7 +552,20 @@
         var pathComponent = pathComponents[level++];
         var file = item.file;
         if (file.path !== Phile.separator) {
-          createTreeNode(file, file.name === pathComponent ? "expanded" : "collapsed");
+          var state, isEnd = false;
+          if (file.name === pathComponent) {
+            state = "expanded";
+            if (level === pathComponents.length) {
+              isEnd = true;
+            }
+          }
+          else {
+            state = "collapsed";
+          }
+          var treeNode = createTreeNode(file, state);
+          if (isEnd) {
+            treeNode.firstChild.lastChild.click();
+          }
         }
         var files = item.children;
         if (files) {
@@ -439,11 +580,13 @@
 
       //build the file tree
       //getChildrenForPath("");
-      function createFileTree(homeDirectory) {
-        var pathComponents = homeDirectory.split(Phile.separator);
+      function createFileTree(dir) {
+        var dom = document.getElementById("tree-nodes");
+        dom.innerHTML = "";
+        var pathComponents = dir.split(Phile.separator);
         phile.getTree({
-          path: pathComponents[0],
-          depth: pathComponents.length,
+          path: dir[0],
+          depth: dir.length,
           success: function(options, xhr, data) {
             createTreeBranch(data, pathComponents);
           },
@@ -451,6 +594,35 @@
         });
       }
 
+      function createFileList(data, dom){
+        dom.innerHTML = "";
+        if (data === null) {
+          return;
+        }
+        var files = data.repositoryFileDto;
+
+        files.sort(Phile.sortOriginalPath);
+
+        var n = files.length, file, i, node;
+        for (i = 0; i < n; i++) {
+          file = files[i];
+          node = createFileNode(file, "collapsed");
+          node.lastChild.lastChild.innerHTML = file.originalParentFolderPath + Phile.separator + file.name;
+          dom.appendChild(node);
+        }
+      }
+
+      function loadTrash() {
+        phile.getTrash({
+          success: function(options, xhr, data){
+            var thrashList = document.getElementById("trash-nodes");
+            createFileList(data, thrashList);
+          },
+          failure: failure
+        });
+      }
+
+      loadTrash();
 
       //get the user home directory
       phile.getUserHomeDir({
@@ -460,6 +632,7 @@
         },
         failure: failure
       });
+
     </script>
   </body>
 </html>

@@ -22,7 +22,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "src/Phile.js",
-            "line": 135,
+            "line": 148,
             "description": "The Phile class provides a javascript API to work with Pentaho files.\nThe optional options parameter sets standard options for this Phile instance.\n   Any global options present in Phile.options are applied if not present in options.\n   Please checkout the <code><a href=\"#property_defaultOptions\">defaultOptions</a></code> property to see the supported options.",
             "is_constructor": 1,
             "params": [
@@ -36,7 +36,7 @@
     "classitems": [
         {
             "file": "src/Phile.js",
-            "line": 163,
+            "line": 176,
             "description": "These are the default options used for new Phile instances.\nThese can always be overriden by passing an options object to the constructor\nIt sets the following properties:\n<ul>\n  <li><code>requestTimeout</code> int: <code>30000</code> - number of milliseconds before a request to the Pentaho repository service will timeout </li>\n  <li><code>async</code> boolean: <code>true</code> - determines whether synchronous or asynchronous communication will be used.</li>\n  <li><code>webapp</code> String: <code>\"pentaho\"</code> - Name of the pentaho web application. You might need to change this if you changed the default name of the pentaho web application.</li>\n  <li><code>mountPoint</code> String: <code>\"api\"</code> - Root of all api webservices. Probably won't need to change this ever.</li>\n  <li><code>dirService</code> String: <code>\"repo/dirs\"</code> - Entrypoint for the dirs webservices. See http://javadoc.pentaho.com/bi-platform500/webservice500/resource_DirectoryResource.html\n  <li><code>fileService</code> String: <code>\"repo/files\"</code> - Entrypoint for the files webservices. See: <a href=\"http://javadoc.pentaho.com/bi-platform500/webservice500/resource_FileResource.html\">http://javadoc.pentaho.com/bi-platform500/webservice500/resource_FileResource.html</a></li>\n  <li><code>sessionService</code> String: <code>\"session\"</code> - Entrypoint for the session webservices. See: <a href=\"http://javadoc.pentaho.com/bi-platform500/webservice500/resource_SessionResource.html\">http://javadoc.pentaho.com/bi-platform500/webservice500/resource_SessionResource.html</a></li>\n</ul>",
             "itemtype": "property",
             "name": "defaultOptions",
@@ -46,35 +46,67 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 191,
+            "line": 204,
             "description": "Separator between path components.",
             "itemtype": "property",
             "name": "separator",
             "static": 1,
-            "type": "string",
+            "type": "String",
             "class": "Phile"
         },
         {
             "file": "src/Phile.js",
-            "line": 199,
-            "description": "Case-sensitive file sort function.\nCan be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.",
+            "line": 212,
+            "description": "Create a comparator to sort files.\nNormally, you don't need this method: you can use one of the prefabricated sort methods.",
             "itemtype": "property",
-            "name": "compareFilesCaseSensitive",
+            "name": "createFileComparator",
             "static": 1,
+            "type": "function",
             "class": "Phile"
         },
         {
             "file": "src/Phile.js",
-            "line": 238,
-            "description": "Case-insensitive file sort function.\nCan be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.",
+            "line": 253,
+            "description": "Case-sensitive file sort function, by path.\nCan be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.\nThis sorts files strictly by alphabetical order of path",
             "itemtype": "property",
-            "name": "compareFilesCaseSensitive",
+            "name": "compareFilesByPathCS",
             "static": 1,
+            "type": "function",
             "class": "Phile"
         },
         {
             "file": "src/Phile.js",
-            "line": 301,
+            "line": 266,
+            "description": "Case-sensitive file sort function, by original path and name.\nCan be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.\nThis sorts files strictly by alphabetical order of path",
+            "itemtype": "property",
+            "name": "compareFilesByOriginalPathAndName",
+            "static": 1,
+            "type": "function",
+            "class": "Phile"
+        },
+        {
+            "file": "src/Phile.js",
+            "line": 280,
+            "description": "Case-sensitive file sort function, by title.\nCan be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.\nThis sorts folder before files and then by (case-sensitive) name",
+            "itemtype": "property",
+            "name": "compareFilesByTitleCS",
+            "static": 1,
+            "type": "function",
+            "class": "Phile"
+        },
+        {
+            "file": "src/Phile.js",
+            "line": 294,
+            "description": "Case-insensitive file sort function.\nCan be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.\nThis sorts folder before files and then by (case-insensitive) name",
+            "itemtype": "property",
+            "name": "compareFilesByTitleCI",
+            "static": 1,
+            "type": "function",
+            "class": "Phile"
+        },
+        {
+            "file": "src/Phile.js",
+            "line": 330,
             "description": "This is the core method to do a request to the Pentaho file service.\nNormally, you do not need to use this method directy, rather use a specific method like\n<code><a href=\"#method_getChildren\">getChildren()</a></code>,\n<code><a href=\"#method_getTree\">getTree()</a></code>,\n<code><a href=\"#method_getContents\">getContents()</a></code>,\n<code><a href=\"#method_getProperties\">getProperties()</a></code>,\nor <code><a href=\"#method_save\">save()</a></code>.\n\nThe method takes one <code>conf</code> argument which represents the message to send to the service.\nThe <code>conf</code> argument supports the following generic properties:\n<dl>\n  <dt><code>success</code></dt>\n  <dd>A callback function to be called when the service responds successfully.\n    The callback is passed the following arguments: <dl>\n      <dt><code>options</code></dt>\n      <dd>The conf object that was passed to the request method, i.e., the request.</dd>\n      <dt><code>xhr</code></dt>\n      <dd>The XMLHttpRequest used for this request. Useful if you want to get response headers or process the raw response.</dd>\n      <dt><code>response</code></dt>\n      <dd>An object that represents the response. Its structure is (obviously) dependent upon the specific request.</dd>\n    </dl>\n  </dd>\n  <dt><code>failure</code></dt>\n  <dd>A callback function to be called when the service did not respond successfully.\n    The callback is passed the following arguments: <dl>\n      <dt><code>options</code></dt>\n      <dd>The conf object that was passed to the request method, i.e., the request.</dd>\n      <dt><code>xhr</code></dt>\n      <dd>The XMLHttpRequest used for this request. Useful if you want to get response headers or process the raw response.</dd>\n      <dt><code>exception</code></dt>\n      <dd>An object that represents the error</dd>\n    </dl>\n  </dd>\n  <dt><code>scope</code></dt>\n  <dd>The scope to use for the callbacks (defaults to null).</dd>\n  <dt><code>headers</code></dt>\n  <dd>\n     An object to hold any HTTP request headers. The property names of this object are used as HTTP header names, and property values are used as the corresponding header values.\n  </dd>\n  <dt><code>params</code></dt>\n  <dd>An object to hold any HTTP query parameters. The property names of this object are used as parameter names, and their corresponding values as parameter values.</dd>\n  <dt><code>data</code></dt>\n  <dd>The message body to send to the server.</dd>\n</dl>",
             "itemtype": "method",
             "name": "request",
@@ -93,8 +125,8 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 360,
-            "description": "This method can be used to get the contents of a directory.\nThe method is passed a configuration object to specify callbacks and the path from where to get children from.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>showHidden</code></dt>\n  <dd>Boolean to specify whether hidden files should be included in the response</dd>\n  <dt><code>filter</code></dt>\n  <dd>String to specify a search string to filter the result.</dd>\n</dl>\nThe response object passed back to the <code>success</code> callback has one property <code>repositoryFileDto</code>.\nThis is an array representing the list of children. Array items have the following properties: <dl>\n  <dt><code>aclNode</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is an ACL node or not.</dd>\n  <dt><code>createdDate</code></dt>\n  <dd>A string that can be parsed as an integer to get the timestamp indicating the date/time this node was created.</dd>\n  <dt><code>fileSize</code></dt>\n  <dd>A string that can be parsed as an integer to get the size (in bytes) of this node in case this node represents a file. If a filesize is not applicable for this node, it is <code>\"-1\"</code>.</dd>\n  <dt><code>folder</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node represents a folder or not.</dd>\n  <dt><code>hidden</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is hidden for the end user or not.</dd>\n  <dt><code>id</code></dt>\n  <dd>A GUID identifiying this node.</dd>\n  <dt><code>locale</code></dt>\n  <dd>The current locale used for localized properties like <code>title</code>.</dd>\n  <dt><code>localeMapEntries</code></dt>\n  <dd>\n    This is an array of localized properties for this file. The array items have these properties:\n    <dl>\n      <dt><code>locale</code></dt>\n      <dd>\n        The name of the locale for this map of localized properties.\n        There is also a special <code>\"default\"</code> locale indicating the current locale.\n      </dd>\n      <dt>properties</dt>\n      <dd>\n        This is a bag of localized properties.\n        <dl>\n          <dt><code>key</code></dt>\n          <dl>The key for this property.</dl>\n          <dt><code>value</code></dt>\n          <dl>The value for this property.</dl>\n        </dl>\n      </dd>\n    </dl>\n  </dd>\n  <dt><code>locked</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is locked or not.</dd>\n  <dt><code>name</code></dt>\n  <dd>The name of this node.</dd>\n  <dt><code>ownerType</code></dt>\n  <dd>A string that can be parsed as an integer indicating the owner type.</dd>\n  <dt><code>path</code></dt>\n  <dd>A string containing the forward slash separated path components.</dd>\n  <dt><code>title</code></dt>\n  <dd>The title for presenting this node to the user.</dd>\n  <dt><code>versioned</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is versioned or not.</dd>\n  <dt><code>versionId</code></dt>\n  <dd>If the file is versioned, the <code>versionId</code> property is present and its value is a String that represents the version number.</dd>\n</dl>",
+            "line": 389,
+            "description": "This method can be used to get the contents of a directory.\nThe method is passed a configuration object to specify callbacks and the path from where to get children from.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"folder\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n  <dt><code>showHidden</code></dt>\n  <dd>Boolean to specify whether hidden files should be included in the response</dd>\n  <dt><code>filter</code></dt>\n  <dd>String to specify a search string to filter the result.</dd>\n</dl>\nThe response object passed back to the <code>success</code> callback has one property <code>repositoryFileDto</code>.\nThis is an array representing the list of children. Array items have the following properties: <dl>\n  <dt><code>aclNode</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is an ACL node or not.</dd>\n  <dt><code>createdDate</code></dt>\n  <dd>A string that can be parsed as an integer to get the timestamp indicating the date/time this node was created.</dd>\n  <dt><code>fileSize</code></dt>\n  <dd>A string that can be parsed as an integer to get the size (in bytes) of this node in case this node represents a file. If a filesize is not applicable for this node, it is <code>\"-1\"</code>.</dd>\n  <dt><code>folder</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node represents a folder or not.</dd>\n  <dt><code>hidden</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is hidden for the end user or not.</dd>\n  <dt><code>id</code></dt>\n  <dd>A GUID identifiying this node.</dd>\n  <dt><code>locale</code></dt>\n  <dd>The current locale used for localized properties like <code>title</code>.</dd>\n  <dt><code>localeMapEntries</code></dt>\n  <dd>\n    This is an array of localized properties for this file. The array items have these properties:\n    <dl>\n      <dt><code>locale</code></dt>\n      <dd>\n        The name of the locale for this map of localized properties.\n        There is also a special <code>\"default\"</code> locale indicating the current locale.\n      </dd>\n      <dt>properties</dt>\n      <dd>\n        This is a bag of localized properties.\n        <dl>\n          <dt><code>key</code></dt>\n          <dl>The key for this property.</dl>\n          <dt><code>value</code></dt>\n          <dl>The value for this property.</dl>\n        </dl>\n      </dd>\n    </dl>\n  </dd>\n  <dt><code>locked</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is locked or not.</dd>\n  <dt><code>name</code></dt>\n  <dd>The name of this node.</dd>\n  <dt><code>ownerType</code></dt>\n  <dd>A string that can be parsed as an integer indicating the owner type.</dd>\n  <dt><code>path</code></dt>\n  <dd>A string containing the forward slash separated path components.</dd>\n  <dt><code>title</code></dt>\n  <dd>The title for presenting this node to the user.</dd>\n  <dt><code>versioned</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is versioned or not.</dd>\n  <dt><code>versionId</code></dt>\n  <dd>If the file is versioned, the <code>versionId</code> property is present and its value is a String that represents the version number.</dd>\n</dl>",
             "itemtype": "method",
             "name": "getChildren",
             "params": [
@@ -108,8 +140,8 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 456,
-            "description": "This method can be used to get the entire tree of files.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>showHidden</code></dt>\n  <dd>Boolean to specify whether hidden files should be included in the response</dd>\n  <dt><code>filter</code></dt>\n  <dd>String to specify a search string to filter the result.</dd>\n  <dt><code>depth</code></dt>\n  <dd>Integer. Specifies the number of levels to traverse. Default: <code>1</code>.</dd>\n</dl>\nThe response object passed back to the <code>success</code> callback has two properties: <dl>\n  <dt><code>file</code></dt>\n  <dd>The <code>file</code> property is an object type which holds the properties of the file that is the root of the tree, i.e. the properties of the file identified by the path specified in the argument <code>conf</code> object.</dd>\n  <dt><code>children</code></dt>\n  <dd>\n    Optional. The <code>children</code> property is an array of objects representing the children of the file identified by the path specified in the argument <code>conf</code> object.\n    Each of these objects again has a <code>file</code> property, and optionally, a <code>children</code> property.\n  </dd>\n</dl>.",
+            "line": 491,
+            "description": "This method can be used to get the entire tree of files.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"folder\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n  <dt><code>showHidden</code></dt>\n  <dd>Boolean to specify whether hidden files should be included in the response</dd>\n  <dt><code>filter</code></dt>\n  <dd>String to specify a search string to filter the result.</dd>\n  <dt><code>depth</code></dt>\n  <dd>Integer. Specifies the number of levels to traverse. Default: <code>1</code>.</dd>\n</dl>\nThe response object passed back to the <code>success</code> callback has two properties: <dl>\n  <dt><code>file</code></dt>\n  <dd>The <code>file</code> property is an object type which holds the properties of the file that is the root of the tree, i.e. the properties of the file identified by the path specified in the argument <code>conf</code> object.</dd>\n  <dt><code>children</code></dt>\n  <dd>\n    Optional. The <code>children</code> property is an array of objects representing the children of the file identified by the path specified in the argument <code>conf</code> object.\n    Each of these objects again has a <code>file</code> property, and optionally, a <code>children</code> property.\n  </dd>\n</dl>.",
             "itemtype": "method",
             "name": "getTree",
             "params": [
@@ -123,7 +155,7 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 495,
+            "line": 532,
             "description": "Get the contents of the trash bin.\nThe response object passed back to the <code>success</code> is an array of <code>repositoryFileDto</code> objects.\nThe structure of these objects are described by the <a href=\"#method_getChildren\"><code>getChildren</code></a> method.",
             "itemtype": "method",
             "name": "getTrash",
@@ -138,14 +170,14 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 512,
-            "description": "This method can be used to get the contents of a particular file.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n</dl>\nPhile is not aware of content types, so callers are responsible for setting an appropriate mime type in the <code>Accept</code> HTTP-header.",
+            "line": 549,
+            "description": "This method can be used to get the contents of a particular file.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"file\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n</dl>\nPhile is not aware of content types, so callers are responsible for setting an appropriate mime type in the <code>Accept</code> HTTP-header.",
             "itemtype": "method",
             "name": "getContents",
             "params": [
                 {
                     "name": "conf",
-                    "description": "Object specifies where and how to get a tree of file objects from.",
+                    "description": "Object specifies the file to get the contents from and the callbacks to be notified.",
                     "type": "Object"
                 }
             ],
@@ -153,14 +185,14 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 529,
-            "description": "This method can be used to get a url to download a particular file.\nThe method takes a single <code>path</code> argument to specify which file to download.",
+            "line": 575,
+            "description": "This method can be used to get a url to download a particular file.\nThe method takes a single <code>path</code> argument to specify which file to download.\nThe <code>path</code> argument may also be a file object.",
             "itemtype": "method",
             "name": "getTree",
             "params": [
                 {
                     "name": "path",
-                    "description": "Path specifies which file to download. Can be specified as a string or an array of path components.",
+                    "description": "Path specifies which file to download. Can be specified as a string or an array of path components. Instead of passing a path you can also pass a file object.",
                     "type": "String"
                 }
             ],
@@ -168,8 +200,8 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 540,
-            "description": "This method can be used to get properties (metadata) of a particular file or directory.\nThe method takes a single <code>path</code> argument to specify which file to download,\nand which callbacks to notify when the properties are received.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n</dl>\nThe properties object that is returned to the callback has the same structure as the items returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.",
+            "line": 590,
+            "description": "This method can be used to get properties (metadata) of a particular file or directory.\nThe method takes a single <code>conf</code> argument to specify for which file to get properties,\nand which callbacks to notify when the properties are received.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"file\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n</dl>\nThe properties object that is returned to the callback has the same structure as the items returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.",
             "itemtype": "method",
             "name": "getProperties",
             "params": [
@@ -183,8 +215,8 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 586,
-            "description": "This method creates a new directory.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the path of the new directory</dd>\n</dl>",
+            "line": 644,
+            "description": "This method creates a new directory.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the path of the new directory</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"file\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n</dl>",
             "itemtype": "method",
             "name": "createDirectory",
             "params": [
@@ -198,8 +230,8 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 599,
-            "description": "This method can be used to save a file to the repository.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n</dl>",
+            "line": 665,
+            "description": "This method can be used to save a file to the repository.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the path of the new file. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"file\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n  <dt><code>data</code></dt>\n  <dd>The contents of the new file</dd>\n</dl>",
             "itemtype": "method",
             "name": "saveFile",
             "params": [
@@ -213,7 +245,7 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 612,
+            "line": 688,
             "description": "Get the home directory of a user.\nSpecific properties: <dl>\n  <dt><code>user</code></dt>\n  <dd>String (optional). Specifies the user for which to get the home directory. If the user is omitted, it gets the home directory of the current user.</dd>\n</dl>",
             "itemtype": "method",
             "name": "getUserHomeDir",
@@ -228,14 +260,44 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 633,
-            "description": "Discards the file or directory.\nSpecific properties: <dl>\n  <dt><code>id</code></dt>\n  <dd>String (optional). The guid of the file or directory to remove.</dd>\n  <dt><code>path</code></dt>\n  <dd>String (optional). The path of the file or directory to remove.</dd>\n  <dt><code>permanent</code></dt>\n  <dd>Boolena (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>\n</dl>",
+            "line": 709,
+            "description": "Discards the file or directory.\nSpecific properties: <dl>\n  <dt><code>id</code></dt>\n  <dd>String (optional). The guid of the file or directory to remove.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying an id you can also specify a file object to use its id.\n  </dd>\n  <dt><code>path</code></dt>\n  <dd>\n    String (optional). The path of the file or directory to remove.\n    If you specify a path but not an id, two requests are made:\n    one to retrieve the properties of the file at the specified path,\n    and then an actual delete by id.\n    Discarding by path does not work for items that are in the trash.\n  </dd>\n  <dt><code>permanent</code></dt>\n  <dd>Boolean (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>\n</dl>",
             "itemtype": "method",
             "name": "discard",
             "params": [
                 {
                     "name": "conf",
                     "description": "Specifies the callbacks to be notified.",
+                    "type": "Object"
+                }
+            ],
+            "class": "Phile"
+        },
+        {
+            "file": "src/Phile.js",
+            "line": 760,
+            "description": "Restores the file or directory.\nSpecific properties: <dl>\n  <dt><code>id</code></dt>\n  <dd>String. The guid of the file or directory to restore.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying an id you can also specify a file object to use its id.\n  </dd>\n</dl>",
+            "itemtype": "method",
+            "name": "restore",
+            "params": [
+                {
+                    "name": "conf",
+                    "description": "Specifies the callbacks to be notified.",
+                    "type": "Object"
+                }
+            ],
+            "class": "Phile"
+        },
+        {
+            "file": "src/Phile.js",
+            "line": 780,
+            "description": "Rename a file.\nThe method takes a single <code>conf</code> argument to specify for which file to get properties,\nand which callbacks to notify when the properties are received.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the file to rename.</dd>\n  <dt><code>newName</code></dt>\n  <dd>Specifies the new name for the file.</dd>\n</dl>",
+            "itemtype": "method",
+            "name": "rename",
+            "params": [
+                {
+                    "name": "conf",
+                    "description": "Specifies the node for which to get properties and the callbacks to be notified.",
                     "type": "Object"
                 }
             ],

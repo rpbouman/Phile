@@ -90,7 +90,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_Phile.js.html#l135"><code>src&#x2F;Phile.js:135</code></a>
+            Defined in: <a href="../files/src_Phile.js.html#l148"><code>src&#x2F;Phile.js:148</code></a>
         </div>
     
 
@@ -154,7 +154,7 @@ The optional options parameter sets standard options for this Phile instance.
             
         
         
-        <a href="../files/src_Phile.js.html#l135"><code>src&#x2F;Phile.js:135</code></a>
+        <a href="../files/src_Phile.js.html#l148"><code>src&#x2F;Phile.js:148</code></a>
         
         </p>
 
@@ -290,7 +290,21 @@ The optional options parameter sets standard options for this Phile instance.
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_rename">rename</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_request">request</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_restore">restore</a>
 
                                 
                                 
@@ -314,7 +328,7 @@ The optional options parameter sets standard options for this Phile instance.
                     <ul class="index-list properties">
                         
                             <li class="index-item property">
-                                <a href="#property_compareFilesCaseSensitive">compareFilesCaseSensitive</a>
+                                <a href="#property_compareFilesByOriginalPathAndName">compareFilesByOriginalPathAndName</a>
 
                                 
                                     <span class="flag static">static</span>
@@ -323,7 +337,34 @@ The optional options parameter sets standard options for this Phile instance.
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_compareFilesCaseSensitive">compareFilesCaseSensitive</a>
+                                <a href="#property_compareFilesByPathCS">compareFilesByPathCS</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_compareFilesByTitleCI">compareFilesByTitleCI</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_compareFilesByTitleCS">compareFilesByTitleCS</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_createFileComparator">createFileComparator</a>
 
                                 
                                     <span class="flag static">static</span>
@@ -405,7 +446,7 @@ The optional options parameter sets standard options for this Phile instance.
             
         
         
-        <a href="../files/src_Phile.js.html#l586"><code>src&#x2F;Phile.js:586</code></a>
+        <a href="../files/src_Phile.js.html#l644"><code>src&#x2F;Phile.js:644</code></a>
         
         </p>
 
@@ -420,6 +461,11 @@ The optional options parameter sets standard options for this Phile instance.
 Specific properties: <dl>
   <dt><code>path</code></dt>
   <dd>Specifies the path of the new directory</dd>
+  <dt><code>file</code></dt>
+  <dd>
+    Instead of specifying a path you can also specify a file object of the type &quot;file&quot;.
+    When file is specified it will overwrite (and thus, also override) the path property.
+  </dd>
 </dl></p>
 
     </div>
@@ -498,7 +544,7 @@ Specific properties: <dl>
             
         
         
-        <a href="../files/src_Phile.js.html#l633"><code>src&#x2F;Phile.js:633</code></a>
+        <a href="../files/src_Phile.js.html#l709"><code>src&#x2F;Phile.js:709</code></a>
         
         </p>
 
@@ -513,10 +559,20 @@ Specific properties: <dl>
 Specific properties: <dl>
   <dt><code>id</code></dt>
   <dd>String (optional). The guid of the file or directory to remove.</dd>
+  <dt><code>file</code></dt>
+  <dd>
+    Instead of specifying an id you can also specify a file object to use its id.
+  </dd>
   <dt><code>path</code></dt>
-  <dd>String (optional). The path of the file or directory to remove.</dd>
+  <dd>
+    String (optional). The path of the file or directory to remove.
+    If you specify a path but not an id, two requests are made:
+    one to retrieve the properties of the file at the specified path,
+    and then an actual delete by id.
+    Discarding by path does not work for items that are in the trash.
+  </dd>
   <dt><code>permanent</code></dt>
-  <dd>Boolena (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>
+  <dd>Boolean (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>
 </dl></p>
 
     </div>
@@ -595,7 +651,7 @@ Specific properties: <dl>
             
         
         
-        <a href="../files/src_Phile.js.html#l360"><code>src&#x2F;Phile.js:360</code></a>
+        <a href="../files/src_Phile.js.html#l389"><code>src&#x2F;Phile.js:389</code></a>
         
         </p>
 
@@ -612,6 +668,11 @@ The configuration object supports all generic configuration properties as docume
 Specific properties: <dl>
   <dt><code>path</code></dt>
   <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>file</code></dt>
+  <dd>
+    Instead of specifying a path you can also specify a file object of the type &quot;folder&quot;.
+    When file is specified it will overwrite (and thus, also override) the path property.
+  </dd>
   <dt><code>showHidden</code></dt>
   <dd>Boolean to specify whether hidden files should be included in the response</dd>
   <dt><code>filter</code></dt>
@@ -746,7 +807,7 @@ This is an array representing the list of children. Array items have the followi
             
         
         
-        <a href="../files/src_Phile.js.html#l512"><code>src&#x2F;Phile.js:512</code></a>
+        <a href="../files/src_Phile.js.html#l549"><code>src&#x2F;Phile.js:549</code></a>
         
         </p>
 
@@ -762,6 +823,11 @@ The configuration object supports all generic configuration properties as docume
 Specific properties: <dl>
   <dt><code>path</code></dt>
   <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>file</code></dt>
+  <dd>
+    Instead of specifying a path you can also specify a file object of the type &quot;file&quot;.
+    When file is specified it will overwrite (and thus, also override) the path property.
+  </dd>
 </dl>
 Phile is not aware of content types, so callers are responsible for setting an appropriate mime type in the <code>Accept</code> HTTP-header.</p>
 
@@ -782,7 +848,7 @@ Phile is not aware of content types, so callers are responsible for setting an a
                     
 
                     <div class="param-description">
-                        <p>Object specifies where and how to get a tree of file objects from.</p>
+                        <p>Object specifies the file to get the contents from and the callbacks to be notified.</p>
 
                     </div>
 
@@ -841,7 +907,7 @@ Phile is not aware of content types, so callers are responsible for setting an a
             
         
         
-        <a href="../files/src_Phile.js.html#l540"><code>src&#x2F;Phile.js:540</code></a>
+        <a href="../files/src_Phile.js.html#l590"><code>src&#x2F;Phile.js:590</code></a>
         
         </p>
 
@@ -853,12 +919,17 @@ Phile is not aware of content types, so callers are responsible for setting an a
 
     <div class="description">
         <p>This method can be used to get properties (metadata) of a particular file or directory.
-The method takes a single <code>path</code> argument to specify which file to download,
+The method takes a single <code>conf</code> argument to specify for which file to get properties,
 and which callbacks to notify when the properties are received.
 The configuration object supports all generic configuration properties as documented in the <code><a href="#method_request">request()</a></code> method.
 Specific properties: <dl>
   <dt><code>path</code></dt>
   <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>file</code></dt>
+  <dd>
+    Instead of specifying a path you can also specify a file object of the type &quot;file&quot;.
+    When file is specified it will overwrite (and thus, also override) the path property.
+  </dd>
 </dl>
 The properties object that is returned to the callback has the same structure as the items returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.</p>
 
@@ -938,7 +1009,7 @@ The properties object that is returned to the callback has the same structure as
             
         
         
-        <a href="../files/src_Phile.js.html#l495"><code>src&#x2F;Phile.js:495</code></a>
+        <a href="../files/src_Phile.js.html#l532"><code>src&#x2F;Phile.js:532</code></a>
         
         </p>
 
@@ -1029,7 +1100,7 @@ The structure of these objects are described by the <a href="#method_getChildren
             
         
         
-        <a href="../files/src_Phile.js.html#l456"><code>src&#x2F;Phile.js:456</code></a>
+        <a href="../files/src_Phile.js.html#l491"><code>src&#x2F;Phile.js:491</code></a>
         
         </p>
 
@@ -1045,6 +1116,11 @@ The configuration object supports all generic configuration properties as docume
 Specific properties: <dl>
   <dt><code>path</code></dt>
   <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>file</code></dt>
+  <dd>
+    Instead of specifying a path you can also specify a file object of the type &quot;folder&quot;.
+    When file is specified it will overwrite (and thus, also override) the path property.
+  </dd>
   <dt><code>showHidden</code></dt>
   <dd>Boolean to specify whether hidden files should be included in the response</dd>
   <dt><code>filter</code></dt>
@@ -1138,7 +1214,7 @@ The response object passed back to the <code>success</code> callback has two pro
             
         
         
-        <a href="../files/src_Phile.js.html#l529"><code>src&#x2F;Phile.js:529</code></a>
+        <a href="../files/src_Phile.js.html#l575"><code>src&#x2F;Phile.js:575</code></a>
         
         </p>
 
@@ -1150,7 +1226,8 @@ The response object passed back to the <code>success</code> callback has two pro
 
     <div class="description">
         <p>This method can be used to get a url to download a particular file.
-The method takes a single <code>path</code> argument to specify which file to download.</p>
+The method takes a single <code>path</code> argument to specify which file to download.
+The <code>path</code> argument may also be a file object.</p>
 
     </div>
 
@@ -1169,7 +1246,7 @@ The method takes a single <code>path</code> argument to specify which file to do
                     
 
                     <div class="param-description">
-                        <p>Path specifies which file to download. Can be specified as a string or an array of path components.</p>
+                        <p>Path specifies which file to download. Can be specified as a string or an array of path components. Instead of passing a path you can also pass a file object.</p>
 
                     </div>
 
@@ -1228,7 +1305,7 @@ The method takes a single <code>path</code> argument to specify which file to do
             
         
         
-        <a href="../files/src_Phile.js.html#l612"><code>src&#x2F;Phile.js:612</code></a>
+        <a href="../files/src_Phile.js.html#l688"><code>src&#x2F;Phile.js:688</code></a>
         
         </p>
 
@@ -1263,6 +1340,104 @@ Specific properties: <dl>
 
                     <div class="param-description">
                         <p>Specifies the callbacks to be notified.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_rename" class="method item">
+    <h3 class="name"><code>rename</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l780"><code>src&#x2F;Phile.js:780</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Rename a file.
+The method takes a single <code>conf</code> argument to specify for which file to get properties,
+and which callbacks to notify when the properties are received.
+The configuration object supports all generic configuration properties as documented in the <code><a href="#method_request">request()</a></code> method.
+Specific properties: <dl>
+  <dt><code>path</code></dt>
+  <dd>Specifies the file to rename.</dd>
+  <dt><code>newName</code></dt>
+  <dd>Specifies the new name for the file.</dd>
+</dl></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the node for which to get properties and the callbacks to be notified.</p>
 
                     </div>
 
@@ -1325,7 +1500,7 @@ Specific properties: <dl>
             
         
         
-        <a href="../files/src_Phile.js.html#l301"><code>src&#x2F;Phile.js:301</code></a>
+        <a href="../files/src_Phile.js.html#l330"><code>src&#x2F;Phile.js:330</code></a>
         
         </p>
 
@@ -1425,6 +1600,103 @@ The <code>conf</code> argument supports the following generic properties:</p>
 </div>
 
                 
+                    <div id="method_restore" class="method item">
+    <h3 class="name"><code>restore</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>conf</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l760"><code>src&#x2F;Phile.js:760</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Restores the file or directory.
+Specific properties: <dl>
+  <dt><code>id</code></dt>
+  <dd>String. The guid of the file or directory to restore.</dd>
+  <dt><code>file</code></dt>
+  <dd>
+    Instead of specifying an id you can also specify a file object to use its id.
+  </dd>
+</dl></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">conf</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Specifies the callbacks to be notified.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_saveFile" class="method item">
     <h3 class="name"><code>saveFile</code></h3>
 
@@ -1467,7 +1739,7 @@ The <code>conf</code> argument supports the following generic properties:</p>
             
         
         
-        <a href="../files/src_Phile.js.html#l599"><code>src&#x2F;Phile.js:599</code></a>
+        <a href="../files/src_Phile.js.html#l665"><code>src&#x2F;Phile.js:665</code></a>
         
         </p>
 
@@ -1481,7 +1753,14 @@ The <code>conf</code> argument supports the following generic properties:</p>
         <p>This method can be used to save a file to the repository.
 Specific properties: <dl>
   <dt><code>path</code></dt>
-  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dd>Specifies the path of the new file. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+  <dt><code>file</code></dt>
+  <dd>
+    Instead of specifying a path you can also specify a file object of the type &quot;file&quot;.
+    When file is specified it will overwrite (and thus, also override) the path property.
+  </dd>
+  <dt><code>data</code></dt>
+  <dd>The contents of the new file</dd>
 </dl></p>
 
     </div>
@@ -1526,9 +1805,9 @@ Specific properties: <dl>
                 <h2 class="off-left">Properties</h2>
 
                 
-                    <div id="property_compareFilesCaseSensitive" class="property item">
-    <h3 class="name"><code>compareFilesCaseSensitive</code></h3>
-    <span class="type">Unknown</span>
+                    <div id="property_compareFilesByOriginalPathAndName" class="property item">
+    <h3 class="name"><code>compareFilesByOriginalPathAndName</code></h3>
+    <span class="type">Function</span>
 
     
 
@@ -1551,7 +1830,7 @@ Specific properties: <dl>
             
         
         
-        <a href="../files/src_Phile.js.html#l199"><code>src&#x2F;Phile.js:199</code></a>
+        <a href="../files/src_Phile.js.html#l266"><code>src&#x2F;Phile.js:266</code></a>
         
         </p>
 
@@ -1561,8 +1840,9 @@ Specific properties: <dl>
     </div>
 
     <div class="description">
-        <p>Case-sensitive file sort function.
-Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.</p>
+        <p>Case-sensitive file sort function, by original path and name.
+Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+This sorts files strictly by alphabetical order of path</p>
 
     </div>
 
@@ -1574,9 +1854,9 @@ Can be passed to the Array <code>sort</code> function to sort an array of files 
 </div>
 
                 
-                    <div id="property_compareFilesCaseSensitive" class="property item">
-    <h3 class="name"><code>compareFilesCaseSensitive</code></h3>
-    <span class="type">Unknown</span>
+                    <div id="property_compareFilesByPathCS" class="property item">
+    <h3 class="name"><code>compareFilesByPathCS</code></h3>
+    <span class="type">Function</span>
 
     
 
@@ -1599,7 +1879,56 @@ Can be passed to the Array <code>sort</code> function to sort an array of files 
             
         
         
-        <a href="../files/src_Phile.js.html#l238"><code>src&#x2F;Phile.js:238</code></a>
+        <a href="../files/src_Phile.js.html#l253"><code>src&#x2F;Phile.js:253</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Case-sensitive file sort function, by path.
+Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+This sorts files strictly by alphabetical order of path</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_compareFilesByTitleCI" class="property item">
+    <h3 class="name"><code>compareFilesByTitleCI</code></h3>
+    <span class="type">Function</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l294"><code>src&#x2F;Phile.js:294</code></a>
         
         </p>
 
@@ -1610,7 +1939,105 @@ Can be passed to the Array <code>sort</code> function to sort an array of files 
 
     <div class="description">
         <p>Case-insensitive file sort function.
-Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.</p>
+Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+This sorts folder before files and then by (case-insensitive) name</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_compareFilesByTitleCS" class="property item">
+    <h3 class="name"><code>compareFilesByTitleCS</code></h3>
+    <span class="type">Function</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l280"><code>src&#x2F;Phile.js:280</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Case-sensitive file sort function, by title.
+Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+This sorts folder before files and then by (case-sensitive) name</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_createFileComparator" class="property item">
+    <h3 class="name"><code>createFileComparator</code></h3>
+    <span class="type">Function</span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_Phile.js.html#l212"><code>src&#x2F;Phile.js:212</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Create a comparator to sort files.
+Normally, you don&#39;t need this method: you can use one of the prefabricated sort methods.</p>
 
     </div>
 
@@ -1647,7 +2074,7 @@ Can be passed to the Array <code>sort</code> function to sort an array of files 
             
         
         
-        <a href="../files/src_Phile.js.html#l163"><code>src&#x2F;Phile.js:163</code></a>
+        <a href="../files/src_Phile.js.html#l176"><code>src&#x2F;Phile.js:176</code></a>
         
         </p>
 
@@ -1704,7 +2131,7 @@ It sets the following properties:</p>
             
         
         
-        <a href="../files/src_Phile.js.html#l191"><code>src&#x2F;Phile.js:191</code></a>
+        <a href="../files/src_Phile.js.html#l204"><code>src&#x2F;Phile.js:204</code></a>
         
         </p>
 

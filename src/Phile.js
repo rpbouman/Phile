@@ -35,6 +35,18 @@ function escapePath(path){
   return path.replace(/\//g, ":");
 }
 
+function ensureFolder(file) {
+  if (String(file.folder) !== "true") {
+    throw new Error("File must be of the type folder");
+  }
+}
+
+function ensureFile(file) {
+  if (String(file.folder) === "true") {
+    throw new Error("File must not be of the type folder");
+  }
+}
+
 function ajax(options){
   var xhr = XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("MSXML2.XMLHTTP.3.0"),
       args, url = options.url,
@@ -103,7 +115,8 @@ function ajax(options){
             options.failure.call(scope, options, this, {
               type: "http",
               status: xhr.status,
-              message: xhr.statusText
+              statusText: xhr.statusText,
+              responseText: xhr.responseText
             });
           }
         }
@@ -192,89 +205,105 @@ Phile.defaultOptions = {
 *  Separator between path components.
 *  @property separator
 *  @static
-*  @type string
+*  @type String
 **/
 Phile.separator = "/";
 
 /**
-*  Case-sensitive file sort function.
-*  Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+*  Create a comparator to sort files.
+*  Normally, you don't need this method: you can use one of the prefabricated sort methods.
 *
-*  @property compareFilesCaseSensitive
+*  @property createFileComparator
 *  @static
+*  @type function
 **/
-Phile.compareFilesCaseSensitive = function(fileDto1, fileDto2){
-  if (fileDto1.file) {
-    fileDto1 = fileDto1.file;
-  }
-  var folder1 = fileDto1.folder;
-
-  if (fileDto2.file) {
-    fileDto2 = fileDto2.file;
-  }
-  var folder2 = fileDto2.folder;
-
-  if (folder1 === folder2) {
-    if (fileDto1.name > fileDto2.name) {
-      return 1;
+Phile.createFileComparator = function(obj){
+  return function(a, b){
+    if (a.file) {
+      a = a.file;
     }
-    else
-    if (fileDto1.name < fileDto2.name) {
-      return -1;
+    if (b.file) {
+      b = b.file;
     }
-    else {
-      return 0;
+    var key, spec, caseSensitive, direction, vA, vB;
+    for (key in obj) {
+      spec = obj[key] || {};
+      vA = a[key];
+      vB = b[key];
+      if (spec.ignoreCase === true) {
+        vA = vA.toUpperCase();
+        vB = vB.toUpperCase();
+      }
+      direction = spec.direction || 1;
+      if (vA > vB) {
+        return direction*1;
+      }
+      else
+      if (vA < vB) {
+        return direction*-1;
+      }
+      else {
+        continue;
+      }
     }
-  }
-  else
-  if (folder1 === "true") {
-    return -1;
-  }
-  else {
-    return 1
-  }
+    return 0;
+  };
 };
+
+/**
+*  Case-sensitive file sort function, by path.
+*  Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+*  This sorts files strictly by alphabetical order of path
+*
+*  @property compareFilesByPathCS
+*  @static
+*  @type function
+**/
+Phile.compareFilesByPathCS = Phile.createFileComparator({
+  path: null
+});
+
+/**
+*  Case-sensitive file sort function, by original path and name.
+*  Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+*  This sorts files strictly by alphabetical order of path
+*
+*  @property compareFilesByOriginalPathAndName
+*  @static
+*  @type function
+**/
+Phile.compareFilesByOriginalPathAndName = Phile.createFileComparator({
+  originalParentFolderPath: null,
+  name: null
+});
+
+/**
+*  Case-sensitive file sort function, by title.
+*  Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+*  This sorts folder before files and then by (case-sensitive) name
+*
+*  @property compareFilesByTitleCS
+*  @static
+*  @type function
+**/
+Phile.compareFilesByTitleCS = Phile.createFileComparator({
+  folder: {direction: -1},
+  title: null
+});
 
 /**
 *  Case-insensitive file sort function.
 *  Can be passed to the Array <code>sort</code> function to sort an array of files returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
+*  This sorts folder before files and then by (case-insensitive) name
 *
-*  @property compareFilesCaseSensitive
+*  @property compareFilesByTitleCI
 *  @static
+*  @type function
 **/
-Phile.compareFilesCaseInsensitive = function(fileDto1, fileDto2){
-  if (fileDto1.file) {
-    fileDto1 = fileDto1.file;
-  }
-  var folder1 = fileDto1.folder;
-
-  if (fileDto2.file) {
-    fileDto2 = fileDto2.file;
-  }
-  var folder2 = fileDto2.folder;
-
-  if (folder1 === folder2) {
-    var name1 = fileDto1.name.toUpperCase();
-    var name2 = fileDto2.name.toUpperCase();
-    if (name1 > name2) {
-      return 1;
-    }
-    else
-    if (name1 < name2) {
-      return -1;
-    }
-    else {
-      return 0;
-    }
-  }
-  else
-  if (folder1 === "true") {
-    return -1;
-  }
-  else {
-    return 1
-  }
-};
+Phile.compareFilesByTitleCI = Phile.createFileComparator({
+  folder: {direction: -1},
+  title: {ignoreCase: true}
+});
 
 Phile.prototype = {
   getUrl: function(service, path, action){
@@ -364,6 +393,11 @@ Phile.prototype = {
 *   Specific properties: <dl>
 *     <dt><code>path</code></dt>
 *     <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+*     <dt><code>file</code></dt>
+*     <dd>
+*       Instead of specifying a path you can also specify a file object of the type "folder".
+*       When file is specified it will overwrite (and thus, also override) the path property.
+*     </dd>
 *     <dt><code>showHidden</code></dt>
 *     <dd>Boolean to specify whether hidden files should be included in the response</dd>
 *     <dt><code>filter</code></dt>
@@ -425,8 +459,9 @@ Phile.prototype = {
 *   @param {object} conf Object specifies where to get children from
 */
   getChildren: function(conf) {
-    if (!conf) {
-      conf = {};
+    if (conf.file) {
+      ensureFolder(conf.file);
+      conf.path = conf.file.path;
     }
     conf.service = this.options.fileService;
     if (!conf.path) {
@@ -459,6 +494,11 @@ Phile.prototype = {
 *   Specific properties: <dl>
 *     <dt><code>path</code></dt>
 *     <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+*     <dt><code>file</code></dt>
+*     <dd>
+*       Instead of specifying a path you can also specify a file object of the type "folder".
+*       When file is specified it will overwrite (and thus, also override) the path property.
+*     </dd>
 *     <dt><code>showHidden</code></dt>
 *     <dd>Boolean to specify whether hidden files should be included in the response</dd>
 *     <dt><code>filter</code></dt>
@@ -479,9 +519,6 @@ Phile.prototype = {
 *   @param {object} conf Object specifies where and how to get a tree of file objects from.
 */
   getTree: function(conf) {
-    if (!conf) {
-      conf = {};
-    }
     if (!conf.params) {
       conf.params = {};
     }
@@ -515,12 +552,21 @@ Phile.prototype = {
 *   Specific properties: <dl>
 *     <dt><code>path</code></dt>
 *     <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+*     <dt><code>file</code></dt>
+*     <dd>
+*       Instead of specifying a path you can also specify a file object of the type "file".
+*       When file is specified it will overwrite (and thus, also override) the path property.
+*     </dd>
 *   </dl>
 *   Phile is not aware of content types, so callers are responsible for setting an appropriate mime type in the <code>Accept</code> HTTP-header.
 *   @method getContents
-*   @param {object} conf Object specifies where and how to get a tree of file objects from.
+*   @param {object} conf Object specifies the file to get the contents from and the callbacks to be notified.
 */
   getContents: function(conf) {
+    if (conf.file) {
+      ensureFile(conf.file);
+      conf.path = conf.file.path;
+    }
     conf.service = this.options.fileService;
     conf.action = null;
     conf.method = "GET";
@@ -529,28 +575,40 @@ Phile.prototype = {
 /**
 *   This method can be used to get a url to download a particular file.
 *   The method takes a single <code>path</code> argument to specify which file to download.
+*   The <code>path</code> argument may also be a file object.
 *   @method getTree
-*   @param {string} path Path specifies which file to download. Can be specified as a string or an array of path components.
+*   @param {string} path Path specifies which file to download. Can be specified as a string or an array of path components. Instead of passing a path you can also pass a file object.
 */
   getUrlForDownload: function(path){
+    if (path.path) {
+      path = path.path;
+    }
     var service = this.options.fileService;
     var url = this.getUrl(service, path, "download");
     return url;
   },
 /**
 *   This method can be used to get properties (metadata) of a particular file or directory.
-*   The method takes a single <code>path</code> argument to specify which file to download,
+*   The method takes a single <code>conf</code> argument to specify for which file to get properties,
 *   and which callbacks to notify when the properties are received.
 *   The configuration object supports all generic configuration properties as documented in the <code><a href="#method_request">request()</a></code> method.
 *   Specific properties: <dl>
 *     <dt><code>path</code></dt>
 *     <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+*     <dt><code>file</code></dt>
+*     <dd>
+*       Instead of specifying a path you can also specify a file object of the type "file".
+*       When file is specified it will overwrite (and thus, also override) the path property.
+*     </dd>
 *   </dl>
 *   The properties object that is returned to the callback has the same structure as the items returned by the <a href="#method_getChildren"><code>getChildren()</code></a> method.
 *   @method getProperties
 *   @param {object} conf Specifies the node for which to get properties and the callbacks to be notified.
 */
   getProperties: function(conf) {
+    if (conf.file) {
+      conf.path = conf.file.path;
+    }
     conf.service = this.options.fileService;
     if (!conf.headers) {
       conf.headers = {};
@@ -562,7 +620,7 @@ Phile.prototype = {
     conf.method = "GET";
     return this.request(conf);
   },
-  create: function(conf) {
+  _create: function(conf) {
     conf.method = "PUT";
     var _success, _scope;
     if (conf.success) {
@@ -588,26 +646,44 @@ Phile.prototype = {
 *   Specific properties: <dl>
 *     <dt><code>path</code></dt>
 *     <dd>Specifies the path of the new directory</dd>
+*     <dt><code>file</code></dt>
+*     <dd>
+*       Instead of specifying a path you can also specify a file object of the type "file".
+*       When file is specified it will overwrite (and thus, also override) the path property.
+*     </dd>
 *   </dl>
 *   @method createDirectory
 *   @param {object} conf Specifies the path for the new directory and the callbacks to be notified.
 */
   createDirectory: function(conf) {
+    if (conf.file) {
+      conf.path = conf.file.path;
+    }
     conf.service = this.options.dirService;
-    return this.create(conf);
+    return this._create(conf);
   },
 /**
 *   This method can be used to save a file to the repository.
 *   Specific properties: <dl>
 *     <dt><code>path</code></dt>
-*     <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+*     <dd>Specifies the path of the new file. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>
+*     <dt><code>file</code></dt>
+*     <dd>
+*       Instead of specifying a path you can also specify a file object of the type "file".
+*       When file is specified it will overwrite (and thus, also override) the path property.
+*     </dd>
+*     <dt><code>data</code></dt>
+*     <dd>The contents of the new file</dd>
 *   </dl>
 *   @method saveFile
 *   @param {object} conf Specifies the path for the new file and the callbacks to be notified.
 */
   saveFile: function(conf) {
+    if (conf.file) {
+      conf.path = conf.file.path;
+    }
     conf.service = this.options.fileService;
-    return this.create(conf);
+    return this._create(conf);
   },
 /**
 *   Get the home directory of a user.
@@ -635,20 +711,32 @@ Phile.prototype = {
 *   Specific properties: <dl>
 *     <dt><code>id</code></dt>
 *     <dd>String (optional). The guid of the file or directory to remove.</dd>
+*     <dt><code>file</code></dt>
+*     <dd>
+*       Instead of specifying an id you can also specify a file object to use its id.
+*     </dd>
 *     <dt><code>path</code></dt>
-*     <dd>String (optional). The path of the file or directory to remove.</dd>
+*     <dd>
+*       String (optional). The path of the file or directory to remove.
+*       If you specify a path but not an id, two requests are made:
+*       one to retrieve the properties of the file at the specified path,
+*       and then an actual delete by id.
+*       Discarding by path does not work for items that are in the trash.
+*     </dd>
 *     <dt><code>permanent</code></dt>
-*     <dd>Boolena (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>
+*     <dd>Boolean (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>
 *   </dl>
 *   @method discard
 *   @param {object} conf Specifies the callbacks to be notified.
 */
   discard: function(conf) {
-    if (conf.id) {
+    var id = conf.file? conf.file.id : conf.id;
+    if (id) {
+      conf.id = id;
       delete conf.path;
       conf.service = this.options.fileService;
       conf.method = "PUT";
-      conf.action = Boolean(conf.permanent) ? "deletepermanent" : "delete";
+      conf.action = (conf.permanent === true) ? "deletepermanent" : "delete";
       conf.data = conf.id;
       this.request(conf);
     }
@@ -668,6 +756,59 @@ Phile.prototype = {
         }
       });
     }
+  },
+/**
+*   Restores the file or directory.
+*   Specific properties: <dl>
+*     <dt><code>id</code></dt>
+*     <dd>String. The guid of the file or directory to restore.</dd>
+*     <dt><code>file</code></dt>
+*     <dd>
+*       Instead of specifying an id you can also specify a file object to use its id.
+*     </dd>
+*   </dl>
+*   @method restore
+*   @param {object} conf Specifies the callbacks to be notified.
+*/
+  restore: function(conf){
+    conf.service = this.options.fileService;
+    conf.action = "restore";
+    conf.method = "PUT";
+    conf.data = conf.file? conf.file.id : conf.id;
+    this.request(conf);
+  },
+/**
+*   Rename a file.
+*   The method takes a single <code>conf</code> argument to specify for which file to get properties,
+*   and which callbacks to notify when the properties are received.
+*   The configuration object supports all generic configuration properties as documented in the <code><a href="#method_request">request()</a></code> method.
+*   Specific properties: <dl>
+*     <dt><code>path</code></dt>
+*     <dd>Specifies the file to rename.</dd>
+*     <dt><code>newName</code></dt>
+*     <dd>Specifies the new name for the file.</dd>
+*   </dl>
+*   @method rename
+*   @param {object} conf Specifies the node for which to get properties and the callbacks to be notified.
+*/
+  rename: function(conf) {
+    conf.service = this.options.fileService;
+    conf.action = "rename";
+    conf.method = "PUT";
+    if (conf.file) {
+      conf.path = conf.file.path;
+    }
+    if (!conf.params) {
+      conf.params = {};
+    }
+    conf.params["newName"] = conf.newName;
+    if (!conf.headers) {
+      conf.headers = {};
+    }
+    if (!conf.headers.Accept) {
+      conf.headers.Accept = "application/xml";
+    }
+    this.request(conf);
   }
 }
 
