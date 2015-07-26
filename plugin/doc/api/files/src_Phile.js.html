@@ -277,7 +277,7 @@ var Phile = function(options) {
 *
 *  @property defaultOptions
 *  @static
-*  @type object
+*  @type Object
 **/
 Phile.defaultOptions = {
   requestTimeout: 30000,      //by default, we bail out after 30 seconds
@@ -313,14 +313,14 @@ Phile.createFileComparator = function(obj){
     if (b.file) {
       b = b.file;
     }
-    var key, spec, caseSensitive, direction, vA, vB;
+    var key, spec, convert, direction, vA, vB;
     for (key in obj) {
       spec = obj[key] || {};
       vA = a[key];
       vB = b[key];
-      if (spec.ignoreCase === true) {
-        vA = vA.toUpperCase();
-        vB = vB.toUpperCase();
+      if (typeof(spec.convert) === &quot;function&quot;) {
+        vA = spec.convert(vA);
+        vB = spec.convert(vB);
       }
       direction = spec.direction || 1;
       if (vA &gt; vB) {
@@ -390,7 +390,7 @@ Phile.compareFilesByTitleCS = Phile.createFileComparator({
 **/
 Phile.compareFilesByTitleCI = Phile.createFileComparator({
   folder: {direction: -1},
-  title: {ignoreCase: true}
+  title: {convert: function(value){return value.toUpperCase();}}
 });
 
 Phile.prototype = {
@@ -516,14 +516,14 @@ Phile.prototype = {
 *           The name of the locale for this map of localized properties.
 *           There is also a special &lt;code&gt;&quot;default&quot;&lt;/code&gt; locale indicating the current locale.
 *         &lt;/dd&gt;
-*         &lt;dt&gt;properties&lt;/dt&gt;
+*         &lt;dt&gt;&lt;code&gt;properties&lt;/code&gt;&lt;/dt&gt;
 *         &lt;dd&gt;
-*           This is a bag of localized properties.
+*           This is a bag of name/value pairs representing localized properties.
 *           &lt;dl&gt;
 *             &lt;dt&gt;&lt;code&gt;key&lt;/code&gt;&lt;/dt&gt;
-*             &lt;dl&gt;The key for this property.&lt;/dl&gt;
+*               &lt;dd&gt;The key for this property.&lt;/dd&gt;
 *             &lt;dt&gt;&lt;code&gt;value&lt;/code&gt;&lt;/dt&gt;
-*             &lt;dl&gt;The value for this property.&lt;/dl&gt;
+*               &lt;dd&gt;The localized value for this property.&lt;/dd&gt;
 *           &lt;/dl&gt;
 *         &lt;/dd&gt;
 *       &lt;/dl&gt;
@@ -664,8 +664,9 @@ Phile.prototype = {
 *   This method can be used to get a url to download a particular file.
 *   The method takes a single &lt;code&gt;path&lt;/code&gt; argument to specify which file to download.
 *   The &lt;code&gt;path&lt;/code&gt; argument may also be a file object.
-*   @method getTree
+*   @method getUrlForDownload
 *   @param {string} path Path specifies which file to download. Can be specified as a string or an array of path components. Instead of passing a path you can also pass a file object.
+*   @type {string} Returns the url to download the file.
 */
   getUrlForDownload: function(path){
     if (path.path) {
@@ -780,7 +781,7 @@ Phile.prototype = {
 *     &lt;dd&gt;String (optional). Specifies the user for which to get the home directory. If the user is omitted, it gets the home directory of the current user.&lt;/dd&gt;
 *   &lt;/dl&gt;
 *   @method getUserHomeDir
-*   @param {object} conf Specifies the callbacks to be notified.
+*   @param {Object} conf Specifies the callbacks to be notified.
 */
   getUserHomeDir: function(conf){
     conf.service = this.options.sessionService;

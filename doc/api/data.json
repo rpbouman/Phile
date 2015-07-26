@@ -41,7 +41,7 @@
             "itemtype": "property",
             "name": "defaultOptions",
             "static": 1,
-            "type": "object",
+            "type": "Object",
             "class": "Phile"
         },
         {
@@ -126,7 +126,7 @@
         {
             "file": "src/Phile.js",
             "line": 389,
-            "description": "This method can be used to get the contents of a directory.\nThe method is passed a configuration object to specify callbacks and the path from where to get children from.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"folder\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n  <dt><code>showHidden</code></dt>\n  <dd>Boolean to specify whether hidden files should be included in the response</dd>\n  <dt><code>filter</code></dt>\n  <dd>String to specify a search string to filter the result.</dd>\n</dl>\nThe response object passed back to the <code>success</code> callback has one property <code>repositoryFileDto</code>.\nThis is an array representing the list of children. Array items have the following properties: <dl>\n  <dt><code>aclNode</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is an ACL node or not.</dd>\n  <dt><code>createdDate</code></dt>\n  <dd>A string that can be parsed as an integer to get the timestamp indicating the date/time this node was created.</dd>\n  <dt><code>fileSize</code></dt>\n  <dd>A string that can be parsed as an integer to get the size (in bytes) of this node in case this node represents a file. If a filesize is not applicable for this node, it is <code>\"-1\"</code>.</dd>\n  <dt><code>folder</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node represents a folder or not.</dd>\n  <dt><code>hidden</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is hidden for the end user or not.</dd>\n  <dt><code>id</code></dt>\n  <dd>A GUID identifiying this node.</dd>\n  <dt><code>locale</code></dt>\n  <dd>The current locale used for localized properties like <code>title</code>.</dd>\n  <dt><code>localeMapEntries</code></dt>\n  <dd>\n    This is an array of localized properties for this file. The array items have these properties:\n    <dl>\n      <dt><code>locale</code></dt>\n      <dd>\n        The name of the locale for this map of localized properties.\n        There is also a special <code>\"default\"</code> locale indicating the current locale.\n      </dd>\n      <dt>properties</dt>\n      <dd>\n        This is a bag of localized properties.\n        <dl>\n          <dt><code>key</code></dt>\n          <dl>The key for this property.</dl>\n          <dt><code>value</code></dt>\n          <dl>The value for this property.</dl>\n        </dl>\n      </dd>\n    </dl>\n  </dd>\n  <dt><code>locked</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is locked or not.</dd>\n  <dt><code>name</code></dt>\n  <dd>The name of this node.</dd>\n  <dt><code>ownerType</code></dt>\n  <dd>A string that can be parsed as an integer indicating the owner type.</dd>\n  <dt><code>path</code></dt>\n  <dd>A string containing the forward slash separated path components.</dd>\n  <dt><code>title</code></dt>\n  <dd>The title for presenting this node to the user.</dd>\n  <dt><code>versioned</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is versioned or not.</dd>\n  <dt><code>versionId</code></dt>\n  <dd>If the file is versioned, the <code>versionId</code> property is present and its value is a String that represents the version number.</dd>\n</dl>",
+            "description": "This method can be used to get the contents of a directory.\nThe method is passed a configuration object to specify callbacks and the path from where to get children from.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"folder\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n  <dt><code>showHidden</code></dt>\n  <dd>Boolean to specify whether hidden files should be included in the response</dd>\n  <dt><code>filter</code></dt>\n  <dd>String to specify a search string to filter the result.</dd>\n</dl>\nThe response object passed back to the <code>success</code> callback has one property <code>repositoryFileDto</code>.\nThis is an array representing the list of children. Array items have the following properties: <dl>\n  <dt><code>aclNode</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is an ACL node or not.</dd>\n  <dt><code>createdDate</code></dt>\n  <dd>A string that can be parsed as an integer to get the timestamp indicating the date/time this node was created.</dd>\n  <dt><code>fileSize</code></dt>\n  <dd>A string that can be parsed as an integer to get the size (in bytes) of this node in case this node represents a file. If a filesize is not applicable for this node, it is <code>\"-1\"</code>.</dd>\n  <dt><code>folder</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node represents a folder or not.</dd>\n  <dt><code>hidden</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is hidden for the end user or not.</dd>\n  <dt><code>id</code></dt>\n  <dd>A GUID identifiying this node.</dd>\n  <dt><code>locale</code></dt>\n  <dd>The current locale used for localized properties like <code>title</code>.</dd>\n  <dt><code>localeMapEntries</code></dt>\n  <dd>\n    This is an array of localized properties for this file. The array items have these properties:\n    <dl>\n      <dt><code>locale</code></dt>\n      <dd>\n        The name of the locale for this map of localized properties.\n        There is also a special <code>\"default\"</code> locale indicating the current locale.\n      </dd>\n      <dt><code>properties</code></dt>\n      <dd>\n        This is a bag of name/value pairs representing localized properties.\n        <dl>\n          <dt><code>key</code></dt>\n            <dd>The key for this property.</dd>\n          <dt><code>value</code></dt>\n            <dd>The localized value for this property.</dd>\n        </dl>\n      </dd>\n    </dl>\n  </dd>\n  <dt><code>locked</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is locked or not.</dd>\n  <dt><code>name</code></dt>\n  <dd>The name of this node.</dd>\n  <dt><code>ownerType</code></dt>\n  <dd>A string that can be parsed as an integer indicating the owner type.</dd>\n  <dt><code>path</code></dt>\n  <dd>A string containing the forward slash separated path components.</dd>\n  <dt><code>title</code></dt>\n  <dd>The title for presenting this node to the user.</dd>\n  <dt><code>versioned</code></dt>\n  <dd>String <code>\"true\"</code> or <code>\"false\"</code> to flag if this is node is versioned or not.</dd>\n  <dt><code>versionId</code></dt>\n  <dd>If the file is versioned, the <code>versionId</code> property is present and its value is a String that represents the version number.</dd>\n</dl>",
             "itemtype": "method",
             "name": "getChildren",
             "params": [
@@ -188,7 +188,7 @@
             "line": 575,
             "description": "This method can be used to get a url to download a particular file.\nThe method takes a single <code>path</code> argument to specify which file to download.\nThe <code>path</code> argument may also be a file object.",
             "itemtype": "method",
-            "name": "getTree",
+            "name": "getUrlForDownload",
             "params": [
                 {
                     "name": "path",
@@ -196,11 +196,12 @@
                     "type": "String"
                 }
             ],
+            "type": "{string} Returns the url to download the file.",
             "class": "Phile"
         },
         {
             "file": "src/Phile.js",
-            "line": 590,
+            "line": 591,
             "description": "This method can be used to get properties (metadata) of a particular file or directory.\nThe method takes a single <code>conf</code> argument to specify for which file to get properties,\nand which callbacks to notify when the properties are received.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the folder for which to get the children. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"file\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n</dl>\nThe properties object that is returned to the callback has the same structure as the items returned by the <a href=\"#method_getChildren\"><code>getChildren()</code></a> method.",
             "itemtype": "method",
             "name": "getProperties",
@@ -215,7 +216,7 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 644,
+            "line": 645,
             "description": "This method creates a new directory.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the path of the new directory</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"file\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n</dl>",
             "itemtype": "method",
             "name": "createDirectory",
@@ -230,7 +231,7 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 665,
+            "line": 666,
             "description": "This method can be used to save a file to the repository.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the path of the new file. You can specify the as a string or an array of path components. If the path is specified as a string, you can separate path components either with a forward slash or with a semi-colon.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying a path you can also specify a file object of the type \"file\".\n    When file is specified it will overwrite (and thus, also override) the path property.\n  </dd>\n  <dt><code>data</code></dt>\n  <dd>The contents of the new file</dd>\n</dl>",
             "itemtype": "method",
             "name": "saveFile",
@@ -245,7 +246,7 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 688,
+            "line": 689,
             "description": "Get the home directory of a user.\nSpecific properties: <dl>\n  <dt><code>user</code></dt>\n  <dd>String (optional). Specifies the user for which to get the home directory. If the user is omitted, it gets the home directory of the current user.</dd>\n</dl>",
             "itemtype": "method",
             "name": "getUserHomeDir",
@@ -260,7 +261,7 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 709,
+            "line": 710,
             "description": "Discards the file or directory.\nSpecific properties: <dl>\n  <dt><code>id</code></dt>\n  <dd>String (optional). The guid of the file or directory to remove.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying an id you can also specify a file object to use its id.\n  </dd>\n  <dt><code>path</code></dt>\n  <dd>\n    String (optional). The path of the file or directory to remove.\n    If you specify a path but not an id, two requests are made:\n    one to retrieve the properties of the file at the specified path,\n    and then an actual delete by id.\n    Discarding by path does not work for items that are in the trash.\n  </dd>\n  <dt><code>permanent</code></dt>\n  <dd>Boolean (optional). If true, the object is removed permanently. If not, it is moved to the trash folder.</dd>\n</dl>",
             "itemtype": "method",
             "name": "discard",
@@ -275,7 +276,7 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 760,
+            "line": 761,
             "description": "Restores the file or directory.\nSpecific properties: <dl>\n  <dt><code>id</code></dt>\n  <dd>String. The guid of the file or directory to restore.</dd>\n  <dt><code>file</code></dt>\n  <dd>\n    Instead of specifying an id you can also specify a file object to use its id.\n  </dd>\n</dl>",
             "itemtype": "method",
             "name": "restore",
@@ -290,7 +291,7 @@
         },
         {
             "file": "src/Phile.js",
-            "line": 780,
+            "line": 781,
             "description": "Rename a file.\nThe method takes a single <code>conf</code> argument to specify for which file to get properties,\nand which callbacks to notify when the properties are received.\nThe configuration object supports all generic configuration properties as documented in the <code><a href=\"#method_request\">request()</a></code> method.\nSpecific properties: <dl>\n  <dt><code>path</code></dt>\n  <dd>Specifies the file to rename.</dd>\n  <dt><code>newName</code></dt>\n  <dd>Specifies the new name for the file.</dd>\n</dl>",
             "itemtype": "method",
             "name": "rename",

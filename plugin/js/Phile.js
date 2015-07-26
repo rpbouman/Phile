@@ -225,14 +225,14 @@ Phile.createFileComparator = function(obj){
     if (b.file) {
       b = b.file;
     }
-    var key, spec, caseSensitive, direction, vA, vB;
+    var key, spec, convert, direction, vA, vB;
     for (key in obj) {
       spec = obj[key] || {};
       vA = a[key];
       vB = b[key];
-      if (spec.ignoreCase === true) {
-        vA = vA.toUpperCase();
-        vB = vB.toUpperCase();
+      if (typeof(spec.convert) === "function") {
+        vA = spec.convert(vA);
+        vB = spec.convert(vB);
       }
       direction = spec.direction || 1;
       if (vA > vB) {
@@ -302,7 +302,7 @@ Phile.compareFilesByTitleCS = Phile.createFileComparator({
 **/
 Phile.compareFilesByTitleCI = Phile.createFileComparator({
   folder: {direction: -1},
-  title: {ignoreCase: true}
+  title: {convert: function(value){return value.toUpperCase();}}
 });
 
 Phile.prototype = {
@@ -428,14 +428,14 @@ Phile.prototype = {
 *           The name of the locale for this map of localized properties.
 *           There is also a special <code>"default"</code> locale indicating the current locale.
 *         </dd>
-*         <dt>properties</dt>
+*         <dt><code>properties</code></dt>
 *         <dd>
-*           This is a bag of localized properties.
+*           This is a bag of name/value pairs representing localized properties.
 *           <dl>
 *             <dt><code>key</code></dt>
-*             <dl>The key for this property.</dl>
+*               <dd>The key for this property.</dd>
 *             <dt><code>value</code></dt>
-*             <dl>The value for this property.</dl>
+*               <dd>The localized value for this property.</dd>
 *           </dl>
 *         </dd>
 *       </dl>
@@ -576,8 +576,9 @@ Phile.prototype = {
 *   This method can be used to get a url to download a particular file.
 *   The method takes a single <code>path</code> argument to specify which file to download.
 *   The <code>path</code> argument may also be a file object.
-*   @method getTree
+*   @method getUrlForDownload
 *   @param {string} path Path specifies which file to download. Can be specified as a string or an array of path components. Instead of passing a path you can also pass a file object.
+*   @type {string} Returns the url to download the file.
 */
   getUrlForDownload: function(path){
     if (path.path) {
@@ -692,7 +693,7 @@ Phile.prototype = {
 *     <dd>String (optional). Specifies the user for which to get the home directory. If the user is omitted, it gets the home directory of the current user.</dd>
 *   </dl>
 *   @method getUserHomeDir
-*   @param {object} conf Specifies the callbacks to be notified.
+*   @param {Object} conf Specifies the callbacks to be notified.
 */
   getUserHomeDir: function(conf){
     conf.service = this.options.sessionService;
