@@ -5,7 +5,7 @@ The main use case for Phile is Pentaho BI Server plugin applications. That said,
 
 Phile ships as a single javascript resource. The unminified version, Phile.js, includes YUIDoc comments and weighs 32k. For production use, there's also a minified version available, Phile-compiled.js, which weighs 5.7k. 
 
-You can simply include Phile with a <script> tag, or you can load it with a module loader, like require(). Phile supports the AMD module convention as well as the common js module convention. 
+You can simply include Phile with a `<script>` tag, or you can load it with a module loader, like `require()`. Phile supports the AMD module convention as well as the common js module convention. 
 
 Phile has its YUIDoc api documentation included in the project. 
 
