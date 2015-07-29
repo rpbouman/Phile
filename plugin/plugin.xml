@@ -2,7 +2,7 @@
 <plugin title="Pentaho Files">
 
   <overlays>
-    <overlay id="startup.phase" resourcebundle="api/repos/phase/resources/messages/launchermessages.properties" priority="2">
+    <overlay id="startup.phile" resourcebundle="api/repos/phase/resources/messages/launchermessages.properties" priority="2">
       <menubar id="toolsmenu">
         <menuitem
           id="files"
